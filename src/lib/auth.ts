@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { db } from "./db";
 import bcrypt from 'bcryptjs'
-import { NextAuthOptions, User } from "next-auth";
+import { NextAuthOptions, getServerSession } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
@@ -72,3 +72,4 @@ export const authOptions: NextAuthOptions = {
         }
     }
 }
+export const getAuthSession = () => getServerSession(authOptions)
