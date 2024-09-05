@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AxiosError } from 'axios'
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import {
     Form,
     FormControl,

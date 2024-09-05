@@ -18,10 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <main className="max-w-screen-2xl mx-auto px-4">
+          <main className="max-w-screen">
             <Navbar />
             {children}
           </main>
