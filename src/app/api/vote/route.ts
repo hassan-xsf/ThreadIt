@@ -1,6 +1,6 @@
-import { postSchema } from "@/schemas/postSchema";
+import { voteSchema } from "@/schemas/voteSchema";
 import { NextResponse } from "next/server";
-import { z, ZodError } from 'zod'
+import { ZodError } from 'zod'
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 import { uploadToCloudinary } from "@/lib/cloudinary";
@@ -9,14 +9,8 @@ import { uploadToCloudinary } from "@/lib/cloudinary";
 export async function POST(req: Request) {
 
     try {
-        const formData = await req.formData();
-        const body = {
-            heading: formData.get('heading'),
-            content: formData.get('content'),
-            postImage: formData.get('postImage'),
-            communityId: formData.get('communityId'),
-        }
-        const { heading, content, communityId, postImage } = postSchema.parse(body)
+        const body = await req.json()
+        const { type, commentId, postId } = voteSchema.parse(body)
         const session = await getAuthSession()
 
         if (!session?.user) {
@@ -27,34 +21,52 @@ export async function POST(req: Request) {
                 { status: 401 }
             );
         }
-        const communityExists = await db.community.findFirst({
-            where: {
-                id: communityId
-            }
-        })
-
-        if (!communityExists) {
+        if (!commentId && !postId) {
             return NextResponse.json({
                 success: false,
-                message: "Invalid community ID!",
+                message: "Invalid commentid/postId found",
             },
                 { status: 400 }
             );
         }
-
-        let postImageURL: string | undefined, profileURL: string | undefined;
-        if (postImage.size !== 0) {
-            const { secure_url }: { secure_url: string } = await uploadToCloudinary(postImage)
-            postImageURL = secure_url;
+        if (postId) {
+            const postExists = await db.post.findFirst({
+                where: {
+                    id: postId
+                }
+            })
+            if (!postExists) {
+                return NextResponse.json({
+                    success: false,
+                    message: "Invalid post ID!",
+                },
+                    { status: 400 }
+                );
+            }
         }
 
-        const post = await db.post.create({
+        else if (commentId) {
+            const commentExists = await db.comment.findFirst({
+                where: {
+                    id: commentId
+                }
+            })
+            if (!commentExists) {
+                return NextResponse.json({
+                    success: false,
+                    message: "Invalid comment ID!",
+                },
+                    { status: 400 }
+                );
+            }
+        }
+
+        const post = await db.comment.create({
             data: {
-                heading,
-                content,
-                communityId,
-                postImage: postImageURL || "",
-                postOwnerId: session.user.id
+                type: type,
+                userId: session.user.id,
+                postId: postId ? postId : undefined,
+                commentId: commentId ? commentId : undefined
             }
 
         })

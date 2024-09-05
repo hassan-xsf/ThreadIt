@@ -26,6 +26,7 @@ model User {
   joinedCommunities Community[]
   posts             Post[]
   Vote              Vote[]
+  Comment           Comment[]
 }
 
 model Account {
@@ -71,8 +72,8 @@ model Post {
   heading     String
   content     String
   postImage   String?
-  User        User?     @relation(fields: [postOwnerId], references: [id])
-  postOwnerId String?
+  User        User      @relation(fields: [postOwnerId], references: [id])
+  postOwnerId String
   community   Community @relation(fields: [communityId], references: [id])
   communityId String
   createdAt   DateTime  @default(now())
@@ -81,22 +82,24 @@ model Post {
 }
 
 model Comment {
-  id        String   @unique @default(uuid())
-  content   String
-  createdAt DateTime @default(now())
-  votes     Vote[]
-  postId    String?
+  id            String   @unique @default(uuid())
+  content       String
+  createdAt     DateTime @default(now())
+  votes         Vote[]
+  postId        String?
+  commmentOwner User     @relation(fields: [userId], references: [id])
 
   parentComment Comment? @relation("commentToParent", fields: [commentId], references: [id])
   commentId     String?
-
   children Comment[] @relation("commentToParent")
+  
   Post     Post?     @relation(fields: [postId], references: [id])
+  userId   String
 }
 
 enum VoteType {
   Upvote
-  DownVote
+  Downvote
 }
 
 model Vote {
@@ -111,4 +114,5 @@ model Vote {
 
   comment   Comment? @relation(fields: [commentId], references: [id])
   commentId String?
+  @@unique([userId, postId, commentId])
 }
