@@ -60,24 +60,87 @@ export async function POST(req: Request) {
                 );
             }
         }
-
-        const post = await db.comment.create({
-            data: {
-                type: type,
-                userId: session.user.id,
-                postId: postId ? postId : undefined,
-                commentId: commentId ? commentId : undefined
+        if (postId) {
+            const isVoted = await db.vote.findFirst({
+                where: {
+                    userId: session.user.id,
+                    postId: postId,
+                }
+            })
+            if (isVoted) {
+                await db.vote.deleteMany({
+                    where: {
+                        userId: session.user.id,
+                        postId: postId,
+                    }
+                })
             }
+            if (isVoted?.type !== type) {
+                const vote = await db.vote.create({
+                    data: {
+                        type: type,
+                        userId: session.user.id,
+                        postId: postId,
+                    }
+                })
+                return NextResponse.json({
+                    success: true,
+                    message: vote.type === "Downvote" ? "Post has been downvoted succesfully" : "Post has been upvoted succesfully!",
+                    data: vote,
+                },
+                    { status: 201 }
+                );
+            }
+            else {
+                return NextResponse.json({
+                    success: true,
+                    message: "Your post upvote/downvote has been removed",
+                },
+                    { status: 200 }
+                );
+            }
+        }
 
-        })
-
-        return NextResponse.json({
-            success: true,
-            message: "Post has been created succesfully!",
-            data: post,
-        },
-            { status: 201 }
-        );
+        else if (commentId) {
+            const isVoted = await db.vote.findFirst({
+                where: {
+                    userId: session.user.id,
+                    commentId,
+                }
+            })
+            if (isVoted) {
+                await db.vote.deleteMany({
+                    where: {
+                        userId: session.user.id,
+                        commentId
+                    }
+                })
+            }
+            if (isVoted?.type !== type) {
+                const vote = await db.vote.create({
+                    data: {
+                        type: type,
+                        userId: session.user.id,
+                        commentId,
+                    }
+                })
+                return NextResponse.json({
+                    success: true,
+                    message: vote.type === "Downvote" ? "Comment has been downvoted succesfully" : "Comment has been upvoted succesfully!",
+                    data: vote,
+                },
+                    { status: 201 }
+                );
+            }
+            else {
+                return NextResponse.json({
+                    success: true,
+                    message: "Your comment upvote/downvote has been removed",
+                },
+                    { status: 200 }
+                );
+            }
+        }
 
 
     } catch (error) {
