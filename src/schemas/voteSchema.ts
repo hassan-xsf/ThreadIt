@@ -6,7 +6,7 @@ enum TypeEnum {
 }
 
 export const voteSchema = z.object({
-    type: z.enum([TypeEnum.Upvote, TypeEnum.Downvote]),
+    type: z.nativeEnum(TypeEnum),
     commentId: z.string().optional(),
     postId: z.string().optional(),
 }); 

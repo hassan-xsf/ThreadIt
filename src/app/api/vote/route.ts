@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 import { ZodError } from 'zod'
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
-import { uploadToCloudinary } from "@/lib/cloudinary";
 
 
 export async function POST(req: Request) {
 
     try {
         const body = await req.json()
+
         const { type, commentId, postId } = voteSchema.parse(body)
         const session = await getAuthSession()
 
@@ -60,6 +60,8 @@ export async function POST(req: Request) {
                 );
             }
         }
+
+
         if (postId) {
             const isVoted = await db.vote.findFirst({
                 where: {
@@ -152,7 +154,6 @@ export async function POST(req: Request) {
                 { status: 400 }
             );
         }
-        console.log(error)
         return NextResponse.json({
             success: false,
             message: "There was a problem creating the community, Please try again later.",
