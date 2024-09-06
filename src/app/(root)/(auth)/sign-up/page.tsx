@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import axios, { AxiosError } from 'axios'
 
 import { Button } from "@/components/ui/Button"
 import {
@@ -13,7 +12,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -22,7 +20,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import GithubSignIn from '@/components/ui/GithubSignIn'
 import { X } from 'lucide-react'
-
+import { signup } from '@/services/sign-up'
+import { useMutation } from '@tanstack/react-query'
 
 const page = () => {
 
@@ -40,22 +39,18 @@ const page = () => {
         if (isOpen) setIsOpen(false)
         router.push("/")
     }
-    async function onSubmit(values: z.infer<typeof signUpSchema>) {
-        try {
-            const data = await axios.post('/api/sign-up', values)
-            if (!data.data.success) {
-                toast.error(data.data.message)
-            }
-            else {
-                toast.success("Your account has been registered!")
-                router.push("/sign-in")
-            }
-
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message || "There was an error signing you up!")
-            }
+    const signUp = useMutation({
+        mutationFn: signup,
+        onSuccess: () => {
+            toast.success("Your account has been registered!")
+            router.push("/sign-in")
+        },
+        onError: () => {
+            toast.error("There was an error logging you in!")
         }
+    })
+    async function onSubmit(values: z.infer<typeof signUpSchema>) {
+        if(!signUp.isPending) signUp.mutate(values)
     }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -119,7 +114,7 @@ const page = () => {
                                     )}
                                 />
                             </div>
-                            <Button type="submit" className="w-full">Sign Up</Button>
+                            <Button type="submit" className="w-full">{signUp.isPending ? "Signing up.." : "Sign Up"}</Button>
                         </form>
                     </Form>
                     <div className="mt-4 text-center">

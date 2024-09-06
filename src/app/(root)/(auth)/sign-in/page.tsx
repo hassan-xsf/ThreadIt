@@ -5,15 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { AxiosError } from 'axios'
-
 import { Button } from "@/components/ui/Button"
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -37,7 +34,7 @@ const page = () => {
         }
     });
     const closeModal = () => {
-        if(isOpen) setIsOpen(false)
+        if (isOpen) setIsOpen(false)
         router.back()
     }
     async function onSubmit(values: z.infer<typeof signInSchema>) {
@@ -59,12 +56,10 @@ const page = () => {
             router.refresh();
 
         } catch (error) {
-            if (error instanceof AxiosError) {
-                toast.error(error.response?.data.message || "There was an error logging you in!")
-            }
+            toast.error("There was an error logging you in!")
         }
-
     }
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-primary-black rounded-lg shadow-lg w-full max-w-md">
@@ -88,7 +83,7 @@ const page = () => {
                         </div>
                     </div>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}  className="space-y-4">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -120,7 +115,7 @@ const page = () => {
                     </Form>
                     <div className="mt-4 text-center">
                         <span className="text-sm text-gray-500 dark:text-gray-400">New to ThreadIt? </span>
-                        <Link href = "/sign-up" className="text-sm text-blue-600 hover:underline dark:text-blue-400">Sign Up</Link>
+                        <Link href="/sign-up" className="text-sm text-blue-600 hover:underline dark:text-blue-400">Sign Up</Link>
                     </div>
                 </div>
             </div>

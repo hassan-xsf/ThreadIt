@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 
 const schema = z.object({
-    communityName: z.string().min(3, { message: "Community name must be at least 3 characters long" } , ).max(15, { message: "Community name must not be greater than 15" } , ),
+    communityName: z.string().min(3, { message: "Community name must be at least 3 characters long" },).max(15, { message: "Community name must not be greater than 15" },),
     bannerImage: z.any().optional(),
     profileImage: z.any().optional(),
 })
@@ -44,8 +44,25 @@ export default function page() {
             reader.readAsDataURL(file)
         }
     }
+
+    const handleDragUpload = (e: React.DragEvent<Element>, type: 'banner' | 'profile') => {
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                if (type === 'banner') {
+                    setBannerImage(reader.result as string)
+                } else {
+                    setProfileImage(reader.result as string)
+                }
+            }
+            reader.readAsDataURL(file)
+        }
+    }
+    
+
     const closeModal = () => {
-        if(isOpen) {
+        if (isOpen) {
             setIsOpen(false)
             router.back();
         }
@@ -98,11 +115,13 @@ export default function page() {
                                 type="banner"
                                 image={bannerImage}
                                 onUpload={(e) => handleImageUpload(e, 'banner')}
+                                onDrop={(e) => handleDragUpload(e, 'banner')}
                             />
                             <ImageUploadBox
                                 type="profile"
                                 image={profileImage}
                                 onUpload={(e) => handleImageUpload(e, 'profile')}
+                                onDrop={(e) => handleDragUpload(e, 'profile')}
                             />
                         </div>
                         <div className="flex justify-end space-x-3">
@@ -160,15 +179,42 @@ interface ImageUploadBoxProps {
     type: 'banner' | 'profile'
     image: string | null
     onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onDrop: (event: React.DragEvent<Element>) => void
 }
 
-function ImageUploadBox({ type, image, onUpload }: ImageUploadBoxProps) {
+
+function ImageUploadBox({ type, onUpload , onDrop}: ImageUploadBoxProps) {
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragging(false);
+        
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            onDrop(e)
+        }
+    };
+
     return (
         <div>
             <label htmlFor={`${type}Upload`} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 {type === 'banner' ? 'Banner Image (Optional)' : 'Profile Image (Optional)'}
             </label>
-            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+            <div
+                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-md ${isDragging ? 'border-blue-500' : 'border-gray-300'}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
                 <div className="space-y-1 text-center">
                     <Upload className="mx-auto h-12 w-12 text-gray-400" />
                     <div className="flex text-sm text-gray-600">
@@ -176,7 +222,7 @@ function ImageUploadBox({ type, image, onUpload }: ImageUploadBoxProps) {
                             htmlFor={`${type}Upload`}
                             className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
-                            <span className = "dark:bg-primary-black block">Upload a file</span>
+                            <span className="dark:bg-primary-black block">Upload a file</span>
                             <input id={`${type}Upload`} name={`${type}Upload`} type="file" className="sr-only" onChange={onUpload} accept="image/*" />
                         </label>
                         <p className="pl-1">or drag and drop</p>
@@ -185,5 +231,5 @@ function ImageUploadBox({ type, image, onUpload }: ImageUploadBoxProps) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

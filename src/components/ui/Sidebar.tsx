@@ -1,6 +1,7 @@
 import { authOptions } from '@/lib/auth'
 import { Home, TrendingUp, Compass, List, Plus, Info, HelpCircle } from 'lucide-react'
 import { getServerSession } from 'next-auth'
+import Link from 'next/link'
 
 const Sidebar = async () => {
 
@@ -55,7 +56,7 @@ const Sidebar = async () => {
                             ))}
                             <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
                                 <Plus size={20} />
-                                <span>Create a community</span>
+                                <Link href = "/c/create">Create a community</Link>
                             </li>
                         </ul>
                     </div>

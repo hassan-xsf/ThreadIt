@@ -26,7 +26,7 @@ const UserAccount: React.FC<UserAccountProps> = ({ image, name }) => {
           {
             image ?
               <>
-                <Image src={image} alt="user" />
+                <Image className="rounded-full size-full" width="50" height="50" src={image} alt="user" />
               </>
               :
 
@@ -41,7 +41,7 @@ const UserAccount: React.FC<UserAccountProps> = ({ image, name }) => {
               {
                 image ?
                   <>
-                    <Image src={image} alt="user" />
+                    <Image className="rounded-full size-full" width="50" height="50" src={image} alt="user" />
                   </>
                   :
 
@@ -56,7 +56,7 @@ const UserAccount: React.FC<UserAccountProps> = ({ image, name }) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href="/about" className = "flex gap-2 my-2">
+          <Link href="/about" className="flex gap-2 my-2">
             <Info className="size-6" />
             <span>About</span>
           </Link>
