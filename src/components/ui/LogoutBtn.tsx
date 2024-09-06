@@ -1,15 +1,14 @@
 "use client"
 
 import React from 'react'
-import { Button } from './Button'
 import { signOut } from 'next-auth/react'
 
-const LogoutBtn = () => {
+const LogoutBtn = ({children} : {children: React.ReactNode}) => {
     return (
-        <Button onClick={() => signOut({
+        <button className = "flex gap-2" onClick={() => signOut({
             redirect: true,
             callbackUrl: `${window.location.origin}/sign-in`
-        })}>Sign Out</Button>
+        })}>{children}</button>
     )
 }
 

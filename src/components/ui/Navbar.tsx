@@ -4,10 +4,12 @@ import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import LogoutBtn from './LogoutBtn'
-import { Search   } from 'lucide-react'
+import { CircleUserRound, Search, User } from 'lucide-react'
 import ThemeBtn from './ThemeBtn'
 import { cn } from '@/lib/utils'
 import Sidebar from './Sidebar'
+import Image from 'next/image'
+import UserAccount from './UserAccount'
 
 const Navbar = async () => {
 
@@ -15,7 +17,7 @@ const Navbar = async () => {
     const data = await getServerSession(authOptions)
     return (
         <>
-            <nav className="fixed top-0 w-screen px-4 py-2 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 flex items-center justify-between z-10">
+            <nav className="fixed top-0 py-2 px-2 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 flex items-center justify-between z-10">
                 <div className="flex justify-between items-center w-[60%]">
 
                     <span className="flex gap-2">
@@ -34,7 +36,11 @@ const Navbar = async () => {
                 <div className="flex items-center space-x-4">
                     <ThemeBtn />
                     {data?.user ? (
-                        <LogoutBtn />
+                        <>
+                            <UserAccount image={data.user.image} name={data.user.name} />
+
+                            {/* <LogoutBtn /> */}
+                        </>
                     ) : (
                         <Link
                             href="/sign-in"
