@@ -1,15 +1,16 @@
 import React from 'react'
-import { Button, buttonVariants } from "@/components/ui/Button"
+import { buttonVariants } from "@/components/ui/Button"
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import LogoutBtn from './LogoutBtn'
-import { Search } from 'lucide-react'
+import { Search   } from 'lucide-react'
 import ThemeBtn from './ThemeBtn'
 import { cn } from '@/lib/utils'
 import Sidebar from './Sidebar'
 
 const Navbar = async () => {
+
 
     const data = await getServerSession(authOptions)
     return (
