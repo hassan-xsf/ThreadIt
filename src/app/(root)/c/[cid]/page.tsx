@@ -1,11 +1,20 @@
+"use client"
 import React from 'react'
 import { Plus, MoreHorizontal } from 'lucide-react'
-import { Button } from "@/components/ui/Button"
 import { useQuery } from '@tanstack/react-query'
+import { getCommunity } from '@/services/community'
+import { Button } from '@/components/ui/Button'
+
 
 const page = async ({ params }: { params: { cid: string } }) => {
 
     const { cid } = params;
+    const { data } = useQuery({
+        queryFn: () => getCommunity(cid),
+        queryKey: ['community' , cid],
+        enabled: !!cid
+    })
+    console.log(data)
 
 
     return (

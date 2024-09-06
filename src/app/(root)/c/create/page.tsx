@@ -74,9 +74,9 @@ export default function page() {
 
     const createCom = useMutation({
         mutationFn: createCommunity,
-        onSuccess: () => {
+        onSuccess: (res) => {
             toast.success("Your community has been created!")
-            router.push("/")
+            router.push(`/c/${res.data.data.id}`)
         },
         onError: (error) => {
             console.log(error)
