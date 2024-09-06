@@ -21,9 +21,11 @@ export default function RootLayout({
     <html suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <main className="max-w-screen">
+          <main className="max-w-screen flex h-screen dark:text-white text-gray-800 bg-white dark:bg-primary-black">
             <Navbar />
-            {children}
+            <div className="flex-1 pt-16 p-6">
+              {children}
+            </div>
           </main>
           <Toaster richColors position="bottom-right" />
         </Providers>

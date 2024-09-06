@@ -22,6 +22,7 @@ import GithubSignIn from '@/components/ui/GithubSignIn'
 import { X } from 'lucide-react'
 import { signup } from '@/services/sign-up'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 
 const page = () => {
 
@@ -45,8 +46,11 @@ const page = () => {
             toast.success("Your account has been registered!")
             router.push("/sign-in")
         },
-        onError: () => {
-            toast.error("There was an error logging you in!")
+        onError: (error) => {
+            if(error instanceof AxiosError) {
+                return toast.error(error.message)
+            }
+            toast.error("There was a problem, Error code: 500")
         }
     })
     async function onSubmit(values: z.infer<typeof signUpSchema>) {

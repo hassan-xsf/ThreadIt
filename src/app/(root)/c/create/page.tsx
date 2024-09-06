@@ -6,14 +6,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
+import { createCommunity } from '@/services/community'
+import { toast } from 'sonner'
+import { AxiosError } from 'axios'
+import { communitySchema } from '@/schemas/communitySchema'
 
-const schema = z.object({
-    communityName: z.string().min(3, { message: "Community name must be at least 3 characters long" },).max(15, { message: "Community name must not be greater than 15" },),
-    bannerImage: z.any().optional(),
-    profileImage: z.any().optional(),
-})
-
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof communitySchema>
 
 export default function page() {
     const router = useRouter();
@@ -21,14 +20,18 @@ export default function page() {
     const [bannerImage, setBannerImage] = useState<string | null>(null)
     const [profileImage, setProfileImage] = useState<string | null>(null)
 
+    const [profileFile, setProfileFile] = useState<File | null>(null)
+    const [bannerFile, setBannerFile] = useState<File | null>(null)
+
     const { control, handleSubmit, watch } = useForm<FormData>({
-        resolver: zodResolver(schema),
+        resolver: zodResolver(communitySchema),
         defaultValues: {
-            communityName: '',
+            name: '',
+            description: ""
         },
     })
 
-    const communityName = watch('communityName')
+    const communityName = watch('name')
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'banner' | 'profile') => {
         const file = event.target.files?.[0]
@@ -41,6 +44,10 @@ export default function page() {
                     setProfileImage(reader.result as string)
                 }
             }
+            if (type == 'profile') {
+                setProfileFile(file)
+            } else setBannerFile(file)
+
             reader.readAsDataURL(file)
         }
     }
@@ -56,22 +63,40 @@ export default function page() {
                     setProfileImage(reader.result as string)
                 }
             }
+            if (type == 'profile') {
+                setProfileFile(file)
+            } else setBannerFile(file)
+
             reader.readAsDataURL(file)
         }
     }
-    
 
+
+    const createCom = useMutation({
+        mutationFn: createCommunity,
+        onSuccess: () => {
+            toast.success("Your community has been created!")
+            router.push("/")
+        },
+        onError: (error) => {
+            console.log(error)
+            if (error instanceof AxiosError) {
+                return toast.error(error.response?.data.message)
+            }
+            toast.error("There was a problem, Error code: 500")
+        }
+    })
+    
     const closeModal = () => {
-        if (isOpen) {
+        if (isOpen && !createCom.isPending) {
             setIsOpen(false)
             router.back();
         }
     }
     const onSubmit = (data: FormData) => {
-        console.log('Form Data:', data)
-        console.log('Banner Image:', bannerImage)
-        console.log('Profile Image:', profileImage)
-        // setIsOpen(false)
+        if (!createCom.isPending) {
+            createCom.mutate({ name: data.name, profile: profileFile, banner: bannerFile, description: data.description })
+        }
     }
 
     return (
@@ -89,21 +114,41 @@ export default function page() {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
-                            <label htmlFor="communityName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 Community Name
                             </label>
                             <Controller
-                                name="communityName"
+                                name="name"
                                 control={control}
                                 render={({ field, fieldState: { error } }) => (
                                     <div>
                                         <input
                                             {...field}
                                             type="text"
-                                            id="communityName"
+                                            id="name"
                                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-primary-black dark:border-gray-600 dark:text-white"
                                             placeholder="Enter community name"
                                             maxLength={15}
+                                        />
+                                        {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
+                                    </div>
+                                )}
+                            />
+                            <label htmlFor="description" className="mt-4 block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Community Description (Optional)
+                            </label>
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field, fieldState: { error } }) => (
+                                    <div>
+                                        <input
+                                            {...field}
+                                            type="text"
+                                            id="description"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-primary-black dark:border-gray-600 dark:text-white"
+                                            placeholder="Enter community description"
+                                            maxLength={201}
                                         />
                                         {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
                                     </div>
@@ -133,10 +178,11 @@ export default function page() {
                                 Cancel
                             </button>
                             <button
+                                disabled = {createCom.isPending}
                                 type="submit"
                                 className="px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600"
                             >
-                                Create Community
+                                {createCom.isPending ? "Creating Community..." : "Create Community"}
                             </button>
                         </div>
                     </form>
@@ -183,7 +229,7 @@ interface ImageUploadBoxProps {
 }
 
 
-function ImageUploadBox({ type, onUpload , onDrop}: ImageUploadBoxProps) {
+function ImageUploadBox({ type, onUpload, onDrop }: ImageUploadBoxProps) {
     const [isDragging, setIsDragging] = useState(false);
 
     const handleDragOver = (e: React.DragEvent) => {
@@ -198,7 +244,7 @@ function ImageUploadBox({ type, onUpload , onDrop}: ImageUploadBoxProps) {
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
-        
+
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             onDrop(e)
         }

@@ -57,11 +57,12 @@ model Session {
 }
 
 model Community {
-  id        String   @id @default(cuid())
-  name      String
-  banner    String?
-  profile   String?
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  banner      String?
+  profile     String?
+  description String?
+  createdAt   DateTime @default(now())
 
   members User[]
   posts   Post[]
@@ -89,12 +90,12 @@ model Comment {
   postId        String?
   commmentOwner User     @relation(fields: [userId], references: [id])
 
-  parentComment Comment? @relation("commentToParent", fields: [commentId], references: [id])
+  parentComment Comment?  @relation("commentToParent", fields: [commentId], references: [id])
   commentId     String?
-  children Comment[] @relation("commentToParent")
-  
-  Post     Post?     @relation(fields: [postId], references: [id])
-  userId   String
+  children      Comment[] @relation("commentToParent")
+
+  Post   Post?  @relation(fields: [postId], references: [id])
+  userId String
 }
 
 enum VoteType {
@@ -114,5 +115,6 @@ model Vote {
 
   comment   Comment? @relation(fields: [commentId], references: [id])
   commentId String?
+
   @@unique([userId, postId, commentId])
 }

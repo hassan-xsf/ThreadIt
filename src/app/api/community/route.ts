@@ -15,8 +15,10 @@ export async function POST(req: Request) {
             name: formData.get('name'),
             banner: formData.get('banner'),
             profile: formData.get('profile'),
+            description: formData.get('description'),
         }
-        const { name, banner, profile } = communitySchema.parse(body)
+        const { name, banner, profile , description} = communitySchema.parse(body)
+
         const session = await getAuthSession()
 
         if (!session?.user) {
@@ -43,12 +45,12 @@ export async function POST(req: Request) {
         }
 
         let bannerURL: string | undefined, profileURL: string | undefined;
-        if (banner.size !== 0) {
+        if (banner && banner.size !== 0) {
             const { secure_url }: { secure_url: string } = await uploadToCloudinary(banner)
             bannerURL = secure_url;
         }
-        if (profile.size !== 0) {
-            const { secure_url }: { secure_url: string } = await uploadToCloudinary(banner)
+        if (profile && profile.size !== 0) {
+            const { secure_url }: { secure_url: string } = await uploadToCloudinary(profile)
             profileURL = secure_url;
         }
 
@@ -58,6 +60,7 @@ export async function POST(req: Request) {
                 name,
                 banner: bannerURL || "",
                 profile: profileURL || "",
+                description,
             }
 
         })
