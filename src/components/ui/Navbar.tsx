@@ -3,12 +3,10 @@ import { buttonVariants } from "@/components/ui/Button"
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import LogoutBtn from './LogoutBtn'
-import { CircleUserRound, Search, User } from 'lucide-react'
+import { Search } from 'lucide-react'
 import ThemeBtn from './ThemeBtn'
 import { cn } from '@/lib/utils'
 import Sidebar from './Sidebar'
-import Image from 'next/image'
 import UserAccount from './UserAccount'
 
 const Navbar = async () => {
