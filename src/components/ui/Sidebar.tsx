@@ -2,6 +2,7 @@ import { authOptions } from '@/lib/auth'
 import { Home, TrendingUp, Compass, List, Plus, Info, HelpCircle } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import MyCommunity from './MyCommunity'
 
 const Sidebar = async () => {
 
@@ -18,9 +19,9 @@ const Sidebar = async () => {
                         { icon: List, label: 'All' },
                     ].map((item, index) => (
                         <li key={index} className="flex items-center gap-4 font-light text-sm py-1">
-                            <div className="p-1 rounded-full">
+                            <Link href="/" className="p-1 rounded-full">
                                 <item.icon size={20} className="dark:text-white text-black" />
-                            </div>
+                            </Link>
                             <span>{item.label}</span>
                         </li>
                     ))}
@@ -46,17 +47,10 @@ const Sidebar = async () => {
                     <div className="border-t border-gray-200 dark:border-gray-800 p-4">
                         <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
                         <ul className="space-y-3">
-                            {['ThreadItNews', 'ThreadItGaming'].map((community, index) => (
-                                <li key={index} className="flex items-center space-x-2">
-                                    <div className="size-7 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
-                                        {community[8]}
-                                    </div>
-                                    <span>r/{community}</span>
-                                </li>
-                            ))}
+                            <MyCommunity session = {data}/>
                             <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
                                 <Plus size={20} />
-                                <Link href = "/c/create">Create a community</Link>
+                                <Link href="/c/create">Create a community</Link>
                             </li>
                         </ul>
                     </div>

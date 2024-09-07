@@ -27,7 +27,6 @@ const page = ({ params }: { params: { cid: string } }) => {
         retry: false,
         enabled: !!cid
     })
-    console.log(data?.data.data)
 
     useEffect(() => {
         if (data) {
@@ -45,7 +44,6 @@ const page = ({ params }: { params: { cid: string } }) => {
             setisJoined(prev => !prev)
         },
     })
-    console.log("REDENDEREDEED!")
     const handleJoin = () => {
         if (session?.user) {
             mutateJoinCommunity();
