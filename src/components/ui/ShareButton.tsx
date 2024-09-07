@@ -18,21 +18,21 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useEffect, useRef, useState } from "react"
 
-const ShareButton = ({children , link} : {children : React.ReactElement , link : string}) => {
+const ShareButton = ({children} : {children : React.ReactElement}) => {
 
     const [copyLink , setcopyLink] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null);
 
 
     useEffect(() => {
-        setcopyLink(window.location + link)
-    } , [link])
+        setcopyLink(window.location.host + window.location.pathname)
+    } , [])
 
     const handleCopy = () => {
         navigator.clipboard.writeText(copyLink)
         toast.info("Link has been copied to your clipboard!")
         if(inputRef.current) {
-            inputRef.current.focus();
+            inputRef.current.select();
         }
     }
     return (

@@ -50,6 +50,7 @@ export default async function page({ params }: { params: { postId: string } }) {
                 content={postDetails.content}
                 image={postDetails.postImage || undefined}
                 upvotes={238}
+                downvotes={55}
                 commentCount={47}
                 timeAgo={timeAgo(postDetails.createdAt)}
                 comments={[]}
@@ -115,6 +116,7 @@ type PostProps = {
     content: string;
     image?: string;
     upvotes: number;
+    downvotes: number;
     commentCount: number;
     timeAgo: string;
     comments: Comment[];
@@ -154,10 +156,10 @@ type PostProps = {
 //     );
 // };
 
-function Post({ author, title, content, image, upvotes, commentCount, timeAgo, comments }: PostProps) {
+function Post({ author, title, content, image, upvotes, downvotes, commentCount, timeAgo, comments }: PostProps) {
     return (
-        <div className="max-w-screen-2xl flex flex-row items-start justify-center my-8 gap-4">
-            <Card className="bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
+        <div className="w-[calc(100vw-20rem)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
+            <Card className="w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
                 <CardHeader className="flex items-start space-x-4">
                     <div className="flex-grow">
                         <div className="flex items-center space-x-2">
@@ -170,19 +172,20 @@ function Post({ author, title, content, image, upvotes, commentCount, timeAgo, c
                 </CardHeader>
                 <CardContent>
                     {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
-                    <p className="text-sm">{content}</p>
+                    <p className="text-sm break-all">{content}</p>
                 </CardContent>
                 <CardFooter className="flex justify-start items-center space-x-4">
                     <div className="flex items-center space-x-1">
                         <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigUp className="size-6" /></Button>
                         <span className="text-sm font-bold">{upvotes}</span>
                         <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigDown className="size-6" /></Button>
+                        <span className="text-sm font-bold">{downvotes}</span>
                     </div>
                     <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
                         <MessageSquare className="size-5 mr-1" />
                         {commentCount}
                     </Button>
-                    <ShareButton link="hello123">
+                    <ShareButton>
                         <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
                             <Share2 className="size-5 mr-1" />
                             Share
@@ -194,14 +197,14 @@ function Post({ author, title, content, image, upvotes, commentCount, timeAgo, c
                 </CardFooter>
 
                 <div className="px-4 pb-4">
-                    <Input placeholder="Add a comment..." className="mb-4 rounded-xl" />
+                    <Input placeholder="Add a comment..." className="placeholder:text-gray-500 mb-4 rounded-xl" />
                     {/* {comments.map(comment => (
                     <CommentComponent key={comment.id} comment={comment} />
                 ))} */}
                 </div>
             </Card>
-            <div className="hidden lg:block w-[30%]">
-                <RightSideRules />
+            <div className="hidden lg:block w-[25%]">
+                <RightSideRules enableShowOff={true} />
             </div>
         </div>
     )

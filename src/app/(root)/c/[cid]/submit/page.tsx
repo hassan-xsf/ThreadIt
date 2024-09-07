@@ -32,7 +32,7 @@ export default async function page({ params }: { params: { cid: string } }) {
                 </div>
                 <div className="hidden lg:block lg:w-1/3 lg:pl-8">
                     <RightSideRules/>
-                    <Card className="mb-4 bg-gray-100 dark:bg-zinc-950">
+                    <Card className="mb-4 bg-gray-100 dark:bg-primary-black">
                         <CardHeader>
                             <CardTitle className="text-lg">USER</CardTitle>
                         </CardHeader>

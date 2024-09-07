@@ -49,7 +49,7 @@ const Sidebar = async () => {
                         <ul className="space-y-3">
                             <MyCommunity session = {data}/>
                             <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
-                                <Plus size={20} />
+                                <Plus size={24} />
                                 <Link href="/c/create">Create a community</Link>
                             </li>
                         </ul>
