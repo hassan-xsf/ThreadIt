@@ -1,19 +1,17 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-import Image from 'next/image'
-import React from 'react'
-
-const UserAvatar = ({name , image , size = "7"} : {name: string | undefined | null, image: string | undefined | null , size? : string}) => {
+const UserAvatar = ({ name, image, size = "7" }: { name: string | undefined | null, image: string | undefined | null, size?: string }) => {
     return (
-        <div className={`cursor-pointer size-${size} rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold`}>
+        <Avatar className={`size-${size}`}>
             {
-                image ?
-                    <>
-                        <Image className="rounded-full size-full" width="50" height="50" src={image} alt="user" />
-                    </>
+                !image ? 
+                    <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${name![0]}`} />
                     :
-                    <div>{name![0]}</div>
+                    <AvatarImage src={image} />
             }
-        </div>
+            <AvatarFallback>{name![0]}</AvatarFallback>
+        </Avatar>
+
     )
 }
 

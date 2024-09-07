@@ -4,7 +4,6 @@ import { Plus, MoreHorizontal, Router } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getCommunity, joinCommunity } from '@/services/community'
 import { Button } from '@/components/ui/Button'
-import CommunityNotFound from './error'
 import CommunityLoading from './loading'
 import { useSession } from 'next-auth/react'
 import UserAvatar from '@/components/ui/UserAvatar'
@@ -12,6 +11,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import NotFound from '@/components/ui/NotFound'
 
 
 const page = ({ params }: { params: { cid: string } }) => {
@@ -54,7 +54,7 @@ const page = ({ params }: { params: { cid: string } }) => {
         }
     }
     return <>
-        {isError && <CommunityNotFound />}
+        {isError && <NotFound name = {"Community"} />}
         {isLoading && <CommunityLoading />}
         {
             isSuccess &&

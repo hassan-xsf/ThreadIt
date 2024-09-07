@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/Button"
-import { Session } from 'next-auth'
 import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,7 +14,7 @@ import { toast } from 'sonner'
 import { postSchema } from '@/schemas/postSchema'
 import { AxiosError } from 'axios'
 
-const CreatePost = ({ cid, session }: { session: Session, cid: string }) => {
+const CreatePost = ({ cid }: { cid: string }) => {
     const router = useRouter();
 
     const { control, handleSubmit, setValue } = useForm<z.infer<typeof postSchema>>({
@@ -35,16 +34,10 @@ const CreatePost = ({ cid, session }: { session: Session, cid: string }) => {
             }
         },
         onSuccess: (res) => {
-            console.log(res.data.data)
+            router.push(`/c/${cid}/post/${res.data.data.id}`)
         }
     })
     const submitPost = (data: z.infer<typeof postSchema>) => {
-        console.log("HUERRAY")
-        console.log("HUERRAY")
-
-        console.log("HUERRAY")
-
-        // if (isPending) return;
         postMutation({ heading: data.heading, content: data.content, communityId: cid, postImage: data.postImage[0] })
     }
     const handleClose = () => {
@@ -100,7 +93,7 @@ const CreatePost = ({ cid, session }: { session: Session, cid: string }) => {
             </div>
             <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={handleClose} className="rounded-xl">Cancel</Button>
-                <Button type="submit" disabled = {isPending} className="rounded-xl bg-blue-400 text-white">{isPending ? "Posting..." : "Post"}</Button>
+                <Button type="submit" disabled = {isPending} className="rounded-xl bg-blue-500 text-white hover:bg-blue-500">{isPending ? "Posting..." : "Post"}</Button>
             </div>
         </form>
     )

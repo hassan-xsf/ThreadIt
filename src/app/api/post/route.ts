@@ -27,6 +27,15 @@ export async function POST(req: Request) {
                 { status: 401 }
             );
         }
+
+        if (!communityId) {
+            return NextResponse.json({
+                success: false,
+                message: "Invalid community ID!",
+            },
+                { status: 400 }
+            );
+        }
         const communityExists = await db.community.findFirst({
             where: {
                 id: communityId
@@ -43,7 +52,7 @@ export async function POST(req: Request) {
         }
 
         let postImageURL: string | undefined, profileURL: string | undefined;
-        if (postImage.size !== 0) {
+        if (postImage && postImage.size !== 0) {
             const { secure_url }: { secure_url: string } = await uploadToCloudinary(postImage)
             postImageURL = secure_url;
         }

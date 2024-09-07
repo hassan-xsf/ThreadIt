@@ -11,7 +11,7 @@ import {
   
 import { Button } from '@/components/ui/Button';
 
-const CommunityNotFound = () => {
+const NotFound = ({name} : {name: string}) => {
     const router = useRouter();
 
     const handleRedirect = () => {
@@ -22,9 +22,9 @@ const CommunityNotFound = () => {
         <AlertDialog open={true}>
             <AlertDialogContent className = "bg-white dark:bg-black">
                 <AlertDialogHeader>
-                    <AlertDialogTitle className = "text-red-500">Error 404: Community Not Found</AlertDialogTitle>
+                    <AlertDialogTitle className = "text-red-500">Error 404: {name} Not Found</AlertDialogTitle>
                     <AlertDialogDescription>
-                        The community you're looking for doesn't exist!
+                        The {name.toLowerCase()} you're looking for doesn't exist!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -35,4 +35,4 @@ const CommunityNotFound = () => {
     );
 }
 
-export default CommunityNotFound;
+export default NotFound;
