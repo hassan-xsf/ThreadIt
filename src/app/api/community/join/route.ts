@@ -42,7 +42,6 @@ export async function POST(res: Response) {
         })
 
         const isFound = joinedComs!.joinedCommunities.some(community => community.id === communityId);
-        console.log(isFound)
         if (isFound) {
             await db.user.update({
                 where: {
@@ -75,6 +74,9 @@ export async function POST(res: Response) {
 
         return NextResponse.json({
             success: true,
+            data: {
+                isJoined: !isFound,
+            },
             message: isFound ? "You have left the community" : "You have joined the community",
         },
             { status: 201 }
