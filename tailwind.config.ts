@@ -19,6 +19,8 @@ const config: Config = {
     			sm: 'calc(var(--radius) - 4px)'
     		},
     		colors: {
+				'secondary-gray' : '#DBE4E9',
+				'secondary-black': '#333D42',
     			'primary-black': '#181C1F',
     			background: 'hsl(var(--background))',
     			foreground: 'hsl(var(--foreground))',

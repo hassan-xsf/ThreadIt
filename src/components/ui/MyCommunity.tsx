@@ -19,7 +19,6 @@ const MyCommunity = async ({ session }: { session: Session }) => {
             }
         },
     });
-    // console.log(coms.joinedCommunities)
 
 
     return (
@@ -36,7 +35,7 @@ const MyCommunity = async ({ session }: { session: Session }) => {
                                     {c.name[0]}
                                 </div>
                         }
-                        <span>r/{c.name}</span>
+                        <span className = "text-sm">c/{c.name}</span>
                     </Link>
                 ))
             }

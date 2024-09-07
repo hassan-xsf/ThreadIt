@@ -21,7 +21,7 @@ export default function RootLayout({
     <html suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <Providers>
-          <main className="max-w-screen flex h-screen dark:text-white text-gray-800 bg-white dark:bg-primary-black">
+          <main className="max-w-screen flex dark:text-white text-gray-800 bg-white dark:bg-primary-black">
             <Navbar />
             <div className="flex-1 pt-16 p-6">
               {children}

@@ -29,7 +29,7 @@ const CreatePost = ({ cid }: { cid: string }) => {
         mutationFn: createPost,
         onError: (error) => {
             console.log(error)
-            if(error instanceof AxiosError) {
+            if (error instanceof AxiosError) {
                 toast.error(error.response?.data.message)
             }
         },
@@ -49,15 +49,15 @@ const CreatePost = ({ cid }: { cid: string }) => {
     return (
         <form onSubmit={handleSubmit(submitPost)} className="space-y-4">
             <div>
-                <Label htmlFor="title" className="block text-sm font-medium dark:text-white">
-                    Title
+                <Label htmlFor="title" className="block text-xs font-bold dark:text-white bg-secondary-gray dark:bg-secondary-black rounded-full max-w-max py-2 px-4">
+                    Add title here<span className="text-red-500">*</span>
                 </Label>
                 <Controller
                     name="heading"
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                         <div>
-                            <Input id="title" placeholder="Title" className="mt-1 rounded-xl" {...field} maxLength={15} />
+                            <Input id="title" placeholder="Title" className="placeholder:text-gray-500 py-2 mt-2 rounded-xl" {...field} maxLength={15} />
                             {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
                         </div>
                     )}
@@ -65,15 +65,15 @@ const CreatePost = ({ cid }: { cid: string }) => {
 
             </div>
             <div>
-                <Label htmlFor="body" className="block text-sm font-medium dark:text-white">
-                    Body
+                <Label htmlFor="body" className="block text-xs font-bold dark:text-white  bg-secondary-gray dark:bg-secondary-black rounded-full max-w-max py-2 px-4">
+                    Add content here<span className="text-red-500">*</span>
                 </Label>
                 <Controller
                     name="content"
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                         <div>
-                            <Textarea id="body" placeholder="Body" className="mt-1 min-h-[100px]  rounded-xl" {...field} maxLength={201}/>
+                            <Textarea id="body" placeholder="Body" className="placeholder:text-gray-500 py-2 mt-2 min-h-[100px]  rounded-xl" {...field} maxLength={201} />
                             {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
                         </div>
                     )}
@@ -81,19 +81,19 @@ const CreatePost = ({ cid }: { cid: string }) => {
 
             </div>
             <div>
-                <Label htmlFor="image-upload" className="block text-sm font-medium dark:text-white">
-                    Upload Image
+                <Label htmlFor="image-upload" className="block text-xs font-bold dark:text-white  bg-secondary-gray dark:bg-secondary-black rounded-full max-w-max py-2 px-4">
+                    Add image here<span className="text-red-500">*</span>
                 </Label>
                 <div>
-                    <Input id="image-upload" type="file" className="mt-1  rounded-xl" onChange={(e) => setValue('postImage', e.target.files)} />
+                    <Input id="image-upload" type="file" className="mt-2  rounded-xl" onChange={(e) => setValue('postImage', e.target.files)} />
                 </div>
 
 
 
             </div>
             <div className="flex justify-end space-x-2">
+                <Button type="submit" disabled={isPending} className="rounded-xl bg-blue-500 text-white hover:bg-blue-500">{isPending ? "Posting..." : "Post"}</Button>
                 <Button variant="outline" onClick={handleClose} className="rounded-xl">Cancel</Button>
-                <Button type="submit" disabled = {isPending} className="rounded-xl bg-blue-500 text-white hover:bg-blue-500">{isPending ? "Posting..." : "Post"}</Button>
             </div>
         </form>
     )
