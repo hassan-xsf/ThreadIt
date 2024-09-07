@@ -1,7 +1,7 @@
 import React from 'react'
 import { Skeleton } from "@/components/ui/skeleton"
 
-const loading = () => {
+const CommunityLoading = () => {
   return (
       <div className="min-h-screen bg-gray-100 dark:bg-primary-black animate-pulse">
         <div className="max-w-screen-xl mx-auto">
@@ -74,4 +74,4 @@ const loading = () => {
     )
   }
 
-export default loading
+export default CommunityLoading

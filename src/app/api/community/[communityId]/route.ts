@@ -30,7 +30,7 @@ export async function GET(req: Request, { params }: { params: { communityId: str
 
         return NextResponse.json({
             success: true,
-            data,
+            data: {c: communityExists , posts: data},
             message: "Community posts have been retrieved.."
         },
             { status: 201 }

@@ -29,7 +29,7 @@ const Sidebar = async () => {
             {
                 data?.user &&
                 <>
-                    <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+                    {/* <div className="border-t border-gray-200 dark:border-gray-800 p-4">
                         <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">RECENT</h3>
                         <ul className="space-y-3">
                             {['AskThreadIt', 'ThreadItTech'].map((community, index) => (
@@ -41,7 +41,7 @@ const Sidebar = async () => {
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </div> */}
 
                     <div className="border-t border-gray-200 dark:border-gray-800 p-4">
                         <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>

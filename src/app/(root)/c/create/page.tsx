@@ -77,7 +77,7 @@ export default function page() {
         onSuccess: (res) => {
             toast.success("Your community has been created!")
             router.push(`/c/${res.data.data.id}`)
-        },
+        },  
         onError: (error) => {
             console.log(error)
             if (error instanceof AxiosError) {
