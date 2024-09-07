@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Providers>
           <main className="max-w-screen flex h-screen dark:text-white text-gray-800 bg-white dark:bg-primary-black">
             <Navbar />

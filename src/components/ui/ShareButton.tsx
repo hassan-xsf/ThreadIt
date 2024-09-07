@@ -1,4 +1,6 @@
 "use client"
+// yoinked from ShadCN Docs
+
 import { Copy } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
@@ -13,15 +15,25 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-
+import { useEffect, useRef, useState } from "react"
 
 const ShareButton = ({children , link} : {children : React.ReactElement , link : string}) => {
 
+    const [copyLink , setcopyLink] = useState("")
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+
+    useEffect(() => {
+        setcopyLink(window.location + link)
+    } , [link])
+
     const handleCopy = () => {
-        navigator.clipboard.writeText(window.Location+link)
+        navigator.clipboard.writeText(copyLink)
         toast.info("Link has been copied to your clipboard!")
+        if(inputRef.current) {
+            inputRef.current.focus();
+        }
     }
     return (
         <Dialog>
@@ -30,31 +42,28 @@ const ShareButton = ({children , link} : {children : React.ReactElement , link :
             </DialogTrigger>
             <DialogContent className="sm:max-w-md bg-white dark:bg-black">
                 <DialogHeader>
-                    <DialogTitle>Share link</DialogTitle>
+                    <DialogTitle className = "text-blue-500">Share link</DialogTitle>
                     <DialogDescription>
-                        Anyone who has this link will be able to view this.
+                        Click on the 'copy' icon to copy the link
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center space-x-2">
                     <div className="grid flex-1 gap-2">
-                        <Label htmlFor="link" className="sr-only">
-                            Link
-                        </Label>
                         <Input
+                            ref = {inputRef}
                             id="link"
-                            defaultValue={window.location + link}
+                            defaultValue={copyLink}
                             readOnly
                         />
                     </div>
-                    <Button onClick = {handleCopy} size="sm" className="px-3">
-                        <span className="sr-only">Copy</span>
-                        <Copy className="h-4 w-4" />
+                    <Button onClick = {handleCopy} variant = "outline" size="sm" className="px-3">
+                        <Copy className="size-4" />
                     </Button>
                 </div>
                 <DialogFooter className="sm:justify-start">
                     <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            Close
+                        <Button type="button" variant = "outline" className = "bg-blue-400">
+                            Okay
                         </Button>
                     </DialogClose>
                 </DialogFooter>
