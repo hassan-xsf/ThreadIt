@@ -11,6 +11,7 @@ import UserAvatar from '@/components/ui/UserAvatar'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 
 const page = ({ params }: { params: { cid: string } }) => {
@@ -18,7 +19,7 @@ const page = ({ params }: { params: { cid: string } }) => {
     const { data: session } = useSession()
     const { cid } = params;
     const [isJoined, setisJoined] = useState(false)
-    const [commMembers,setcomMembers] = useState(0)
+    const [commMembers, setcomMembers] = useState(0)
 
     const router = useRouter()
     const { isError, isLoading, isSuccess, data } = useQuery({
@@ -60,26 +61,30 @@ const page = ({ params }: { params: { cid: string } }) => {
             <div className="min-h-screen bg-gray-100 dark:bg-primary-black text-gray-900 dark:text-gray-100">
                 <div className="max-w-screen-xl mx-auto">
                     {/* Banner */}
-                    <div className="h-32 bg-blue-400 relative">
+                    <div className="h-32 bg-primary-black dark:bg-white relative">
                         {
                             data.data.data.c.banner ?
                                 <Image
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                    width="900"
                                     height="128"
-                                    width="128"
                                     src={data.data.data.c.banner}
                                     alt="Banner"
-                                    className="w-full h-full object-cover"
+                                    className="object-contain"
                                 />
                                 :
-                                <div className="w-full h-full object-cover">
+                                <div className="w-full h-full object-fill">
                                 </div>
                         }
                         <div className="absolute -bottom-8 left-4 flex items-end">
                             {
                                 data.data.data.c.profile ?
-                                    <Image className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center text-white text-4xl border-4 border-white" src={data.data.data.profile} width="128" height="128" alt="Profile" />
+                                    <Image className="bg-red-500 rounded-full flex items-center justify-center text-white text-4xl border-4 border-white" src={data.data.data.c.profile} width="96" height="96" alt="Profile" />
                                     :
-                                    <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center text-white text-4xl border-4 border-white">
+                                    <div className="bg-red-500 rounded-full flex size-24 items-center justify-center text-white text-4xl border-4 border-white">
                                         {data.data.data.c.name[0]}
                                     </div>
                             }
@@ -90,10 +95,12 @@ const page = ({ params }: { params: { cid: string } }) => {
                     {/* Header */}
                     <header className="bg-white dark:bg-primary-black shadow-sm p-4 flex items-center justify-end pt-8">
                         <div className="flex items-center space-x-2">
-                            <Button variant="outline" className="rounded-full flex items-center">
-                                <Plus className="w-4 h-4 mr-1" />
-                                Create Post
-                            </Button>
+                            <Link href = {`/c/${data.data.data.c.id}/submit`}>
+                                <Button variant="outline" className="rounded-full flex items-center">
+                                    <Plus className="w-4 h-4 mr-1" />
+                                    Create Post
+                                </Button>
+                            </Link>
                             <Button disabled={joinPending} onClick={handleJoin} className="rounded-full">{joinPending ? (!isJoined ? "Joining..." : "Leaving...") : (!isJoined ? "Join" : "Leave")}</Button>
                             <Button variant="ghost" size="icon">
                                 <MoreHorizontal className="w-6 h-6" />

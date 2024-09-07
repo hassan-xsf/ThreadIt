@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 const CommunityLoading = () => {
   return (
-      <div className="min-h-screen bg-gray-100 dark:bg-primary-black animate-pulse">
+      <div className="min-h-screen animate-pulse bg-gray-100 dark:bg-primary-black">
         <div className="max-w-screen-xl mx-auto">
           {/* Banner skeleton */}
           <div className="h-32 bg-gray-200 dark:bg-zinc-950 relative">

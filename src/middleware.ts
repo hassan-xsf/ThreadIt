@@ -5,6 +5,11 @@ import type { NextRequest } from 'next/server'
 export async function middleware(req: NextRequest) {
     const token = await getToken({ req })
 
+    if(!token) {
+        if(req.nextUrl.pathname.includes("/submit")) {
+            return NextResponse.redirect(new URL('/sign-in', req.nextUrl));
+        }
+    }
     if(token) {
         if (req.nextUrl.pathname === '/sign-in' ||
             req.nextUrl.pathname === "/sign-up"

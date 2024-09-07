@@ -192,14 +192,14 @@ export default function page() {
                     <div className="bg-white dark:bg-primary-black rounded-lg shadow overflow-hidden">
                         <div className="h-24 bg-blue-500 relative">
                             {bannerImage && (
-                                <img src={bannerImage} alt="Community banner" className="w-full h-full object-contain" />
+                                <img src={bannerImage} alt="Community banner" className="w-full h-full object-fill" />
                             )}
                         </div>
                         <div className="p-4">
                             <div className="flex items-center space-x-3">
                                 <div className="w-16 h-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
                                     {profileImage ? (
-                                        <img src={profileImage} alt="Community profile" className="w-full h-full object-contain" />
+                                        <img src={profileImage} alt="Community profile" className="w-full h-full object-fill" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
                                             <Users size={32} className="text-gray-400 dark:text-gray-500" />
