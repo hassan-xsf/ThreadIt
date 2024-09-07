@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import NotFound from "@/components/ui/NotFound"
 import RightSideRules from "@/components/ui/RightSideRules"
+import ShareButton from "@/components/ui/ShareButton"
 import UserAvatar from "@/components/ui/UserAvatar"
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
@@ -155,7 +156,7 @@ type PostProps = {
 
 function Post({ author, title, content, image, upvotes, commentCount, timeAgo, comments }: PostProps) {
     return (
-        <div className="max-w-screen-2xl flex flex-row items-center justify-center my-8 gap-4">
+        <div className="max-w-screen-2xl flex flex-row items-start justify-center my-8 gap-4">
             <Card className="bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
                 <CardHeader className="flex items-start space-x-4">
                     <div className="flex-grow">
@@ -173,20 +174,22 @@ function Post({ author, title, content, image, upvotes, commentCount, timeAgo, c
                 </CardContent>
                 <CardFooter className="flex justify-start items-center space-x-4">
                     <div className="flex items-center space-x-1">
-                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigUp className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigUp className="size-6" /></Button>
                         <span className="text-sm font-bold">{upvotes}</span>
-                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigDown className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigDown className="size-6" /></Button>
                     </div>
                     <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                        <MessageSquare className="w-4 h-4 mr-1" />
+                        <MessageSquare className="size-5 mr-1" />
                         {commentCount}
                     </Button>
+                    <ShareButton link="hello123">
+                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
+                            <Share2 className="size-5 mr-1" />
+                            Share
+                        </Button>
+                    </ShareButton>
                     <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                        <Share2 className="w-4 h-4 mr-1" />
-                        Share
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                        <MoreHorizontal className="w-4 h-4" />
+                        <MoreHorizontal className="size-5" />
                     </Button>
                 </CardFooter>
 
