@@ -1,5 +1,4 @@
 
-import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import CommentFooter from "@/components/ui/CommentFooter"
 import { Input } from "@/components/ui/input"
@@ -8,7 +7,7 @@ import RightSideRules from "@/components/ui/RightSideRules"
 import UserAvatar from "@/components/ui/UserAvatar"
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
-import { voteSchema } from "@/schemas/voteSchema"
+import { Vote } from "@prisma/client"
 
 
 
@@ -40,7 +39,7 @@ export default async function page({ params }: { params: { postId: string } }) {
             }
         })
     }
-    console.log(postDetails)
+    console.log(postDetails!.votes)
 
     return (
         !postDetails ? <NotFound name="Post" />
@@ -51,7 +50,7 @@ export default async function page({ params }: { params: { postId: string } }) {
                 title={postDetails.heading}
                 content={postDetails.content}
                 image={postDetails.postImage || undefined}
-                votes={postDetails.votes.length || 0}
+                votes={postDetails.votes}
                 commentCount={47}
                 timeAgo={timeAgo(postDetails.createdAt)}
                 comments={[]}
@@ -117,7 +116,7 @@ type PostProps = {
     title: string;
     content: string;
     image?: string;
-    votes: number;
+    votes: Vote[];
     commentCount: number;
     timeAgo: string;
     comments: Comment[];

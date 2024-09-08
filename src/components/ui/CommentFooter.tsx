@@ -10,32 +10,62 @@ import { vote } from '@/services/vote'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 import { TypeEnum } from '@/schemas/voteSchema'
+import { Vote, VoteType } from '@prisma/client'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 
-const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes: number, commentCount: number }) => {
+const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes: Vote[], commentCount: number }) => {
 
+    const {data: session} = useSession();
+    const router = useRouter();
+    console.log(votes)
 
-    const [currentVotes , setCurrentVotes] = useState(0)
+    const [currentVotes, setCurrentVotes] = useState(0)
+    const [isVoted , setisVoted] = useState<null | TypeEnum>(null)
+
 
     useEffect(() => {
-        setCurrentVotes(votes)
-    }, [votes])
+
+        let totalVotes : number = 0;
+
+        votes.forEach(i => {
+            if(i.type === 'Downvote') totalVotes--;
+            else if(i.type === 'Upvote') totalVotes++;
+        })
+        setCurrentVotes(totalVotes)
+        if(session?.user) {
+            votes.some(e => {
+                e.userId === session.user.id
+                console.log(e.type)
+                if(e.type === "Upvote") {
+                    setisVoted(TypeEnum.Upvote)
+                }
+                else if(e.type === "Downvote") {
+                    setisVoted(TypeEnum.Downvote)
+                }
+            })
+        }
+
+    }, [votes , session])
 
 
     const { mutate: mutateVote, isPending } = useMutation({
         mutationFn: vote,
         onSuccess: (res) => {
-            if(res.data.data.vote === null) {
-                setCurrentVotes(prev => prev + (res.data.data.voteType === 'Upvote' ? -1 : +1))
-                console.log(currentVotes + (res.data.data.voteType === 'Upvote' ? -1 : +1))
+
+            if (res.data.data.vote === null) {
+                setCurrentVotes(res.data.data.voteCount)
+                setisVoted(null)
             }
             else {
-                setCurrentVotes(prev => prev + (res.data.data.voteType === 'Upvote' ? +1 : -1))
-                console.log(currentVotes + (res.data.data.voteType === 'Upvote' ? +1 : -1))
+                setisVoted(res.data.data.voteType === "Upvote" ? TypeEnum.Upvote : TypeEnum.Downvote)
+                setCurrentVotes(res.data.data.voteCount)
             }
             console.log(res.data)
         },
         onError: (error) => {
+            console.log(error)
             if (error instanceof AxiosError) {
                 toast.error(error.response?.data.message)
             }
@@ -44,17 +74,30 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
             }
         }
     })
-
+    const test = () => {
+        console.log(isVoted)
+    }
     const handleVote = (type: TypeEnum) => {
-        if(!isPending) mutateVote({ type , postId })
+        if(!session?.user) {
+            return router.push("/sign-in")
+        }   
+        if (!isPending) mutateVote({ type, postId })
     }
     return (
         <CardFooter className="flex justify-start items-center space-x-4">
-            <div className="flex items-center space-x-1">
-                <Button onClick={() => handleVote(TypeEnum.Upvote)} variant="ghost" size="lg" className="text-xs p-1 h-7"><ArrowBigUp className="size-7" /></Button>
-                {isPending ? <Loader2 className = "animate-spin"/> : <span className="text-sm font-bold">{currentVotes}</span>}
-                <Button onClick={() => handleVote(TypeEnum.Downvote)} variant="ghost" size="lg" className="text-xs p-1 h-7"><ArrowBigDown className="size-7" /></Button>
+            <div className="flex space-x-4 text-sm">
+                {/* Upvote/Downvote */}
+                <div className= {`flex items-center space-x-2 ${isVoted === null ? "bg-gray-100 dark:bg-neutral-950" : isVoted === VoteType.Upvote ? "bg-[#D93900]" : "bg-[#6A5CFF]"} text-white p-1 rounded-full`}>
+                    <button disabled = {isPending} onClick={() => handleVote(TypeEnum.Upvote)} className="text-gray-400 hover:text-white focus:outline-none">
+                        <ArrowBigUp size={28} fill ={isVoted ? "white" : "none"} className=" text-white hover:scale-110 " />
+                    </button>
+                    {isPending ? <Loader2 className="animate-spin" /> : <span className="dark:text-white text-black font-bold">{currentVotes}</span>}
+                    <button disabled = {isPending} onClick={() => handleVote(TypeEnum.Downvote)} className="text-gray-400 hover:text-white focus:outline-none">
+                        <ArrowBigDown size={28}  fill ={isVoted ? "white" : "none"}  className=" text-white hover:scale-110" />
+                    </button>
+                </div>
             </div>
+        
             <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
                 <MessageSquare className="size-6 mr-1" />
                 <span className="text-sm font-bold">{commentCount}</span>
@@ -65,7 +108,7 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
                     Share
                 </Button>
             </ShareButton>
-            <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
+            <Button onClick = {test} variant="ghost" size="sm" className="text-xs p-1 h-6">
                 <MoreHorizontal className="size-5" />
             </Button>
         </CardFooter>

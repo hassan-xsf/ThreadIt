@@ -83,7 +83,7 @@ model Post {
 }
 
 model Comment {
-  id            String   @unique @default(uuid())
+  id            String   @id @unique @default(uuid())
   content       String
   createdAt     DateTime @default(now())
   votes         Vote[]
@@ -104,7 +104,7 @@ enum VoteType {
 }
 
 model Vote {
-  id   String   @unique @default(uuid())
+  id   String   @id @unique @default(uuid())
   type VoteType
 
   user   User   @relation(fields: [userId], references: [id])
