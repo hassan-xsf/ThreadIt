@@ -88,7 +88,7 @@ export async function POST(req: Request) {
                 return NextResponse.json({
                     success: true,
                     message: vote.type === "Downvote" ? "Post has been downvoted succesfully" : "Post has been upvoted succesfully!",
-                    data: vote,
+                    data: {vote: vote , voteType: vote.type},
                 },
                     { status: 201 }
                 );
@@ -97,6 +97,7 @@ export async function POST(req: Request) {
                 return NextResponse.json({
                     success: true,
                     message: "Your post upvote/downvote has been removed",
+                    data: {vote: null , voteType: type},
                 },
                     { status: 200 }
                 );

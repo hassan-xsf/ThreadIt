@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-enum TypeEnum {
+export enum TypeEnum {
     Upvote = 'Upvote',
     Downvote = 'Downvote',
 }

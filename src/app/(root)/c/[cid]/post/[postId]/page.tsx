@@ -1,14 +1,14 @@
 
 import { Button } from "@/components/ui/Button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import CommentFooter from "@/components/ui/CommentFooter"
 import { Input } from "@/components/ui/input"
 import NotFound from "@/components/ui/NotFound"
 import RightSideRules from "@/components/ui/RightSideRules"
-import ShareButton from "@/components/ui/ShareButton"
 import UserAvatar from "@/components/ui/UserAvatar"
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
-import { ArrowBigUp, ArrowBigDown, MessageSquare, Share2, MoreHorizontal } from 'lucide-react'
+import { voteSchema } from "@/schemas/voteSchema"
 
 
 
@@ -35,7 +35,8 @@ export default async function page({ params }: { params: { postId: string } }) {
                         name: true,
                         image: true,
                     }
-                }
+                },
+                votes: true
             }
         })
     }
@@ -45,12 +46,12 @@ export default async function page({ params }: { params: { postId: string } }) {
         !postDetails ? <NotFound name="Post" />
             :
             <Post
+                id = {postDetails.id}
                 author={postDetails.User}
                 title={postDetails.heading}
                 content={postDetails.content}
                 image={postDetails.postImage || undefined}
-                upvotes={238}
-                downvotes={55}
+                votes={postDetails.votes.length || 0}
                 commentCount={47}
                 timeAgo={timeAgo(postDetails.createdAt)}
                 comments={[]}
@@ -108,6 +109,7 @@ type Comment = {
 }
 
 type PostProps = {
+    id: string,
     author: {
         name: string,
         image: string,
@@ -115,8 +117,7 @@ type PostProps = {
     title: string;
     content: string;
     image?: string;
-    upvotes: number;
-    downvotes: number;
+    votes: number;
     commentCount: number;
     timeAgo: string;
     comments: Comment[];
@@ -156,7 +157,7 @@ type PostProps = {
 //     );
 // };
 
-function Post({ author, title, content, image, upvotes, downvotes, commentCount, timeAgo, comments }: PostProps) {
+function Post({ id , author, title, content, image, votes, commentCount, timeAgo, comments }: PostProps) {
     return (
         <div className="w-[calc(100vw-20rem)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
             <Card className="w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
@@ -174,27 +175,7 @@ function Post({ author, title, content, image, upvotes, downvotes, commentCount,
                     {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
                     <p className="text-sm break-all">{content}</p>
                 </CardContent>
-                <CardFooter className="flex justify-start items-center space-x-4">
-                    <div className="flex items-center space-x-1">
-                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigUp className="size-6" /></Button>
-                        <span className="text-sm font-bold">{upvotes}</span>
-                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6"><ArrowBigDown className="size-6" /></Button>
-                        <span className="text-sm font-bold">{downvotes}</span>
-                    </div>
-                    <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                        <MessageSquare className="size-5 mr-1" />
-                        {commentCount}
-                    </Button>
-                    <ShareButton>
-                        <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                            <Share2 className="size-5 mr-1" />
-                            Share
-                        </Button>
-                    </ShareButton>
-                    <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                        <MoreHorizontal className="size-5" />
-                    </Button>
-                </CardFooter>
+                <CommentFooter postId = {id} votes = {votes} commentCount = {commentCount}/>
 
                 <div className="px-4 pb-4">
                     <Input placeholder="Add a comment..." className="placeholder:text-gray-500 mb-4 rounded-xl" />

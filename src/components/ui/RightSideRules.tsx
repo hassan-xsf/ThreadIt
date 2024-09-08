@@ -39,16 +39,16 @@ export default function RightSideRules({ enableShowOff = false }: { enableShowOf
         <div className="space-y-4 mb-4">
             <Card className="bg-gray-100 dark:bg-zinc-950">
                 <CardHeader>
-                    <CardTitle className="text-lg font-bold">RULES</CardTitle>
+                    <CardTitle className="text-sm font-bold  dark:text-gray-400">RULES</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Accordion type="single" collapsible className="w-full">
                         {rules.map((rule, index) => (
                             <AccordionItem key={index} value={`item-${index}`}>
-                                <AccordionTrigger className="text-sm font-medium text-start">
+                                <AccordionTrigger className="text-xs font-medium text-start dark:text-gray-400">
                                     {index + 1}. {rule.title}
                                 </AccordionTrigger>
-                                <AccordionContent className="text-sm">
+                                <AccordionContent className="text-xs dark:text-gray-400">
                                     {rule.content}
                                 </AccordionContent>
                             </AccordionItem>
@@ -60,10 +60,10 @@ export default function RightSideRules({ enableShowOff = false }: { enableShowOf
                 enableShowOff &&
                 <Card className="bg-gray-100 dark:bg-zinc-950">
                     <CardHeader>
-                        <CardTitle className="text-lg font-bold">SHOWOFF SATURDAYS</CardTitle>
+                        <CardTitle className="text-sm font-bold dark:text-gray-400">SHOWOFF SATURDAYS</CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm">
-                        <p className="mb-2">
+                    <CardContent className="text-xs  dark:text-gray-400">
+                        <p className="mb-2 ">
                             Work on something and want to share it? Showoff Saturdays are for you! Make a new post on Saturday and tag it [Showoff Saturday] and watch the views rise.
                         </p>
                         <p>
