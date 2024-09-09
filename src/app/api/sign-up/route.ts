@@ -27,7 +27,6 @@ export async function POST(request: Request) {
         });
 
         if (userExists) {
-            console.log(userExists)
             return NextResponse.json({
                 success: false,
                 message: userExists.name === name ? "Username is already taken" : "Email is already taken!",

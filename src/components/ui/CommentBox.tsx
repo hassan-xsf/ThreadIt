@@ -14,6 +14,7 @@ import { CommentProps } from '@/app/(root)/c/[cid]/post/[postId]/page';
 import UserAvatar from './UserAvatar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Votes from './Votes';
 
 
 
@@ -73,7 +74,6 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
     const { mutate: commentMutate, isPending } = useMutation({
         mutationFn: comment,
         onSuccess: (res) => {
-            console.log(res.data.data)
             toast.success("Commented successfully!")
             router.refresh();
 
@@ -129,9 +129,11 @@ const CommentComponent = ({ comment, depth = 0 }: { comment: CommentProps; depth
                     <p className="text-sm font-semibold">{comment.commentOwner?.name || "Unknown"}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{comment.content}</p>
                     <div className="flex items-center space-x-2 mt-1">
-                        <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigUp className="w-4 h-4 mr-1" /> {comment.votes.length}</Button>
-                        <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigDown className="w-4 h-4" /></Button>
-                        <Button variant="ghost" size="sm" className="text-xs p-0 h-auto" onClick={() => setShowReplyInput(!showReplyInput)}>Reply</Button>
+                        <Votes id={comment.id} votes={comment.votes} voteFor='Comment'>
+                            {/* <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigDown className="w-4 h-4" /></Button> */}
+                            {/* <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigUp className="w-4 h-4 mr-1" /> {comment.votes.length}</Button> */}
+                            <Button variant="ghost" size="sm" className="text-xs p-0 h-auto" onClick={() => setShowReplyInput(!showReplyInput)}>Reply</Button>
+                        </Votes>
                     </div>
                     {showReplyInput && (
                         <div className="mt-2">

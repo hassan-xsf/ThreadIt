@@ -87,10 +87,10 @@ export async function POST(req: Request) {
                 })
                 const [upvotesCount, downvotesCount] = await db.$transaction([
                     db.vote.count({
-                        where: { type: 'Upvote' }
+                        where: { postId , type: 'Upvote' }
                     }),
                     db.vote.count({
-                        where: { type: 'Downvote' }
+                        where: { postId , type: 'Downvote' }
                     })
                 ]);
                 return NextResponse.json({
@@ -104,10 +104,10 @@ export async function POST(req: Request) {
             else {
                 const [upvotesCount, downvotesCount] = await db.$transaction([
                     db.vote.count({
-                        where: { type: 'Upvote' }
+                        where: { postId , type: 'Upvote' }
                     }),
                     db.vote.count({
-                        where: { type: 'Downvote' }
+                        where: { postId , type: 'Downvote' }
                     })
                 ]);
                 return NextResponse.json({
@@ -143,24 +143,41 @@ export async function POST(req: Request) {
                         commentId,
                     }
                 })
+                const [upvotesCount, downvotesCount] = await db.$transaction([
+                    db.vote.count({
+                        where: { commentId, type: 'Upvote' }
+                    }),
+                    db.vote.count({
+                        where: { commentId, type: 'Downvote' }
+                    })
+                ]);
+
                 return NextResponse.json({
                     success: true,
                     message: vote.type === "Downvote" ? "Comment has been downvoted succesfully" : "Comment has been upvoted succesfully!",
-                    data: vote,
+                    data: { vote: vote, voteType: vote.type , voteCount: upvotesCount - downvotesCount},
                 },
                     { status: 201 }
                 );
             }
             else {
+                const [upvotesCount, downvotesCount] = await db.$transaction([
+                    db.vote.count({
+                        where: { commentId, type: 'Upvote' }
+                    }),
+                    db.vote.count({
+                        where: { commentId, type: 'Downvote' }
+                    })
+                ]);
                 return NextResponse.json({
                     success: true,
                     message: "Your comment upvote/downvote has been removed",
+                    data: { vote: null, voteType: type , voteCount: upvotesCount - downvotesCount},
                 },
                     { status: 200 }
                 );
             }
         }
-
 
     } catch (error) {
         if (error instanceof ZodError) {

@@ -38,9 +38,9 @@ export type CommentProps = Comment & {
 }
 
 
-export default async function page({ params }: { params: { postId: string, cid: string } }) {
+export default async function page({ params }: { params: { postId: string} }) {
 
-    const { postId, cid } = params;
+    const { postId } = params;
     // TODO
     // Shouldn't have used this, but am lazy rn.
 
@@ -124,7 +124,7 @@ function Post({ id, author, title, content, image, votes, commentCount, timeAgo,
                     {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
                     <p className="text-sm break-all">{content}</p>
                 </CardContent>
-                <Votes postId={id} votes={votes}>
+                <Votes id={id} votes={votes} voteFor = {'Post'}>
                     <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
                         <MessageSquare className="size-6 mr-1" />
                         <span className="text-sm font-bold">{commentCount}</span>
