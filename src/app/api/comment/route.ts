@@ -1,6 +1,6 @@
 import { commentSchema } from "@/schemas/commentSchema";
 import { NextResponse } from "next/server";
-import { z, ZodError } from 'zod'
+import { ZodError } from 'zod'
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 

@@ -19,8 +19,6 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
 
     const {data: session} = useSession();
     const router = useRouter();
-    console.log(votes)
-
     const [currentVotes, setCurrentVotes] = useState(0)
     const [isVoted , setisVoted] = useState<null | TypeEnum>(null)
 
@@ -37,7 +35,6 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
         if(session?.user) {
             votes.some(e => {
                 e.userId === session.user.id
-                console.log(e.type)
                 if(e.type === "Upvote") {
                     setisVoted(TypeEnum.Upvote)
                 }
@@ -60,9 +57,9 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
             }
             else {
                 setisVoted(res.data.data.voteType === "Upvote" ? TypeEnum.Upvote : TypeEnum.Downvote)
+                console.log(res.data.data)
                 setCurrentVotes(res.data.data.voteCount)
             }
-            console.log(res.data)
         },
         onError: (error) => {
             console.log(error)
@@ -74,9 +71,6 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
             }
         }
     })
-    const test = () => {
-        console.log(isVoted)
-    }
     const handleVote = (type: TypeEnum) => {
         if(!session?.user) {
             return router.push("/sign-in")
@@ -89,11 +83,11 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
                 {/* Upvote/Downvote */}
                 <div className= {`flex items-center space-x-2 ${isVoted === null ? "bg-gray-100 dark:bg-neutral-950" : isVoted === VoteType.Upvote ? "bg-[#D93900]" : "bg-[#6A5CFF]"} text-white p-1 rounded-full`}>
                     <button disabled = {isPending} onClick={() => handleVote(TypeEnum.Upvote)} className="text-gray-400 hover:text-white focus:outline-none">
-                        <ArrowBigUp size={28} fill ={isVoted ? "white" : "none"} className=" text-white hover:scale-110 " />
+                        <ArrowBigUp size={28} className={`hover:scale-110 ${isVoted ? "fill-white text-white" : "fill-none dark:text-white text-gray-400"}`} />
                     </button>
                     {isPending ? <Loader2 className="animate-spin" /> : <span className="dark:text-white text-black font-bold">{currentVotes}</span>}
                     <button disabled = {isPending} onClick={() => handleVote(TypeEnum.Downvote)} className="text-gray-400 hover:text-white focus:outline-none">
-                        <ArrowBigDown size={28}  fill ={isVoted ? "white" : "none"}  className=" text-white hover:scale-110" />
+                        <ArrowBigDown size={28}  className={`hover:scale-110 ${isVoted ? "fill-white text-white" : "fill-none dark:text-white text-gray-400"}`} />
                     </button>
                 </div>
             </div>
@@ -103,12 +97,12 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
                 <span className="text-sm font-bold">{commentCount}</span>
             </Button>
             <ShareButton>
-                <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                    <Share2 className="size-5 mr-1" />
+                <Button variant="ghost" size="sm" className="text-sm p-1 h-6">
+                    <Share2 className="size-5 mr-2" />
                     Share
                 </Button>
             </ShareButton>
-            <Button onClick = {test} variant="ghost" size="sm" className="text-xs p-1 h-6">
+            <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
                 <MoreHorizontal className="size-5" />
             </Button>
         </CardFooter>

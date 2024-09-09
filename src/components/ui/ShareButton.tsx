@@ -62,9 +62,6 @@ const ShareButton = ({children} : {children : React.ReactElement}) => {
                 </div>
                 <DialogFooter className="sm:justify-start">
                     <DialogClose asChild>
-                        <Button type="button" variant = "outline" className = "bg-blue-400">
-                            Okay
-                        </Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

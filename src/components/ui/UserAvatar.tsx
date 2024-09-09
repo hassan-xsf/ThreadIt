@@ -16,3 +16,4 @@ const UserAvatar = ({ name, image, size = "7" }: { name: string | undefined | nu
 }
 
 export default UserAvatar
+

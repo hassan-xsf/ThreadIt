@@ -110,7 +110,6 @@ export async function POST(req: Request) {
                         where: { type: 'Downvote' }
                     })
                 ]);
-                
                 return NextResponse.json({
                     success: true,
                     message: "Your post upvote/downvote has been removed",
