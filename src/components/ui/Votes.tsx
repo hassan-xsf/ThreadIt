@@ -15,7 +15,6 @@ import { useSession } from 'next-auth/react'
 
 const Votes = ({ id, votes , voteFor , children }: { id: string, votes: Vote[] , voteFor : 'Post' | 'Comment' , children: React.ReactNode }) => {
 
-    console.log(id)
     const {data: session} = useSession();
     const router = useRouter();
     const [currentVotes, setCurrentVotes] = useState(0)

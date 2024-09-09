@@ -1,13 +1,10 @@
 "use client"
 
-import React, { startTransition, useEffect, useOptimistic, useState } from 'react'
+import React, { useState } from 'react'
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback } from './avatar';
 import { Button } from './Button';
-import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
-import { Comment } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
-import { comment } from '@/services/comment';
+import { comment as commentService} from '@/services/comment';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { CommentProps } from '@/app/(root)/c/[cid]/post/[postId]/page';
@@ -15,17 +12,33 @@ import UserAvatar from './UserAvatar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Votes from './Votes';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import timeAgo from '@/lib/timeAgo';
 
 
+const submitCommentSchema = z.object({
+    content: z.string().min(3, "Comment must be atleast of 3 characters").max(201, "Comment must not be longer than 201 characters"),
+})
 
 const CommentBox = ({ postId, initialComments }: { postId: string, initialComments: CommentProps[] }) => {
 
     const [showReplyInput, setShowReplyInput] = useState(false);
-    const [commentMessage, setCommentMessage] = useState("")
 
     const { data: session } = useSession();
 
     const router = useRouter();
+
+    const { handleSubmit: handleCommentSubmit, register: commentRegister, formState: { errors: commentErrors }, reset: resetComment } = useForm({
+        resolver: zodResolver(submitCommentSchema),
+        defaultValues: {
+            content: "",
+        },
+    });
+
+
+
 
 
     // const commentsTMP =
@@ -72,8 +85,8 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
 
 
     const { mutate: commentMutate, isPending } = useMutation({
-        mutationFn: comment,
-        onSuccess: (res) => {
+        mutationFn: commentService,
+        onSuccess: () => {
             toast.success("Commented successfully!")
             router.refresh();
 
@@ -85,28 +98,29 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
             console.log(error)
         }
     })
-    const onComment = () => {
+    const onComment = (e: z.infer<typeof submitCommentSchema>) => {
         if (!session || !session.user) {
             return router.push("/sign-in")
         }
         if (isPending) return;
-        setTimeout(() => commentMutate({ content: commentMessage, postId }), 1000);
-        setCommentMessage("")
+        commentMutate({ content: e.content, postId });
+        resetComment();
     }
     return (
         <div className="px-4 pb-4">
-            <div className="flex items-end flex-col">
-                <Input disabled={isPending} minLength={3} value={commentMessage} maxLength={201} placeholder="Add a comment..." onChange={(e) => setCommentMessage(e.currentTarget.value)} onFocus={() => setShowReplyInput(true)} className="placeholder:text-gray-500 mb-4 rounded-xl" />
+            <form onSubmit={handleCommentSubmit(onComment)} className="flex items-end flex-col">
+                <Input {...commentRegister('content')} disabled={isPending} minLength={3} maxLength={201} placeholder="Add a comment..." onFocus={() => setShowReplyInput(true)} className="placeholder:text-gray-500 mb-4 rounded-xl" />
+                {commentErrors.content && <p className="text-xs text-red-600 self-start">{commentErrors.content.message}</p>}
                 {showReplyInput &&
                     <div className="flex gap-2">
-                        <Button disabled={isPending} onClick={() => setShowReplyInput(false)} size="sm" className="rounded-full mt-2 bg-gray-200 dark text-black dark:text-white">Cancel</Button>
-                        <Button disabled={isPending} onClick={onComment} size="sm" className="rounded-full mt-2 bg-[#96401b] hover:bg-[#96401b] text-white ">{isPending ? "Commenting..." : "Comment"}</Button>
+                        <Button type="submit" disabled={isPending} onClick={() => session?.user && setShowReplyInput(false)} size="sm" className="rounded-full mt-2 bg-gray-200 dark text-black">Cancel</Button>
+                        <Button disabled={isPending} size="sm" className="rounded-full mt-2 bg-[#96401b] hover:bg-[#96401b] text-white ">{isPending ? "Commenting..." : "Comment"}</Button>
                     </div>
                 }
-            </div>
+            </form>
 
             {initialComments && initialComments.map(comment => (
-                <CommentComponent key={comment.id} comment={comment} />
+                <CommentComponent key={comment.id} postId = {postId}  comment={comment} />
             ))}
         </div>
     )
@@ -114,8 +128,46 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
 
 
 
-const CommentComponent = ({ comment, depth = 0 }: { comment: CommentProps; depth?: number }) => {
+const CommentComponent = ({ postId , comment,  depth = 0 }: { postId: string , comment: CommentProps; depth?: number }) => {
+
+    console.log(comment)
+    const router = useRouter();
+
+    const { handleSubmit: handleReply, register: replyRegister, formState: { errors: replyError }, reset: resetReply } = useForm({
+        resolver: zodResolver(submitCommentSchema),
+        defaultValues: {
+            content: "",
+        },
+    });
+
     const [showReplyInput, setShowReplyInput] = useState(false);
+
+
+    const { mutate: replyMutate, isPending } = useMutation({
+        mutationFn: commentService,
+        onSuccess: (res) => {
+            console.log(res)
+            toast.success("Replied successfully!")
+            router.refresh();
+
+        },
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.message)
+            }
+            console.log(error)
+        }
+    })
+
+    const onReply = (e: z.infer<typeof submitCommentSchema>) => {
+
+        console.log({ content: e.content, postId, parentCommentId : comment.id })
+
+        replyMutate({ content: e.content, postId, parentCommentId : comment.id });
+
+        setShowReplyInput(false)
+        resetReply();
+    }
 
     if (depth >= 5) return null;
     return (
@@ -124,9 +176,15 @@ const CommentComponent = ({ comment, depth = 0 }: { comment: CommentProps; depth
                 {
                     comment.commentOwner &&
                     <UserAvatar name={comment.commentOwner.name || "Unknown"} image={comment.commentOwner.image} size={5} />
+
                 }
-                <div className="flex-grow">
-                    <p className="text-sm font-semibold">{comment.commentOwner?.name || "Unknown"}</p>
+                <div className="flex flex-col gap-1">
+                    <div className="flex-grow flex items-center">
+
+                        <p className="text-sm font-semibold">{comment.commentOwner?.name || "Unknown"}</p>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">• {timeAgo(comment.createdAt)}</span>
+                    </div>
+
                     <p className="text-sm text-gray-600 dark:text-gray-300">{comment.content}</p>
                     <div className="flex items-center space-x-2 mt-1">
                         <Votes id={comment.id} votes={comment.votes} voteFor='Comment'>
@@ -136,10 +194,11 @@ const CommentComponent = ({ comment, depth = 0 }: { comment: CommentProps; depth
                         </Votes>
                     </div>
                     {showReplyInput && (
-                        <div className="mt-2">
-                            <Input placeholder="Write a reply..." className="text-sm" />
-                            <Button size="sm" className="mt-2">Submit</Button>
-                        </div>
+                        <form onSubmit={handleReply(onReply)} className="mt-2">
+                            <Input {...replyRegister('content')} placeholder="Write a reply..." className="text-sm rounded-full" />
+                            {replyError.content && <p className="text-xs text-red-600 self-start">{replyError.content.message}</p>}
+                            <Button disabled = {isPending} type = "submit" size="sm" className="rounded-full mt-2 bg-gray-200 dark text-black">{isPending ? "Replying..." : "Reply"}</Button>
+                        </form>
                     )}
                 </div>
             </div>
