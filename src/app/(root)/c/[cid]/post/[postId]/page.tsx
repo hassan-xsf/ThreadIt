@@ -1,5 +1,5 @@
 
-import { Button } from "@/components/ui/Button"
+import { Button, buttonVariants } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import CommentBox from "@/components/ui/CommentBox"
 import Votes from "@/components/ui/Votes"
@@ -172,9 +172,9 @@ export default async function page({ params }: { params: { postId: string, cid: 
 
 export function Post({ comId, id, author, title, content, image, votes, commentCount, timeAgo, comments, commentsDisabled = false, children }: PostProps) {
     return (
-        <div className="w-[calc(100vw-20rem)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
+        <div className="w-[calc(100vw-30vw)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
             <Card className={cn("h-full w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100", commentsDisabled ? "cursor-pointer hover:dark:bg-zinc-800 hover:bg-gray-100" : "cursor-none")} >
-                <Link href={`/c/${comId}/post/${id}`} className = {` ${commentsDisabled || "cursor-auto"} `}>
+                <Link href={`/c/${comId}/post/${id}`}>
                     <CardHeader className="flex items-start space-x-4">
                         <div className="flex-grow">
                             <div className="flex items-center space-x-2">
@@ -191,10 +191,10 @@ export function Post({ comId, id, author, title, content, image, votes, commentC
                     </CardContent>
                 </Link>
                 <Votes id={id} votes={votes} voteFor={'Post'}>
-                    <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
+                    <Link href={`/c/${comId}/post/${id}`} className= {cn(buttonVariants({variant: 'ghost'}) , "text-xs p-1 h-6")}>
                         <MessageSquare className="size-6 mr-1" />
                         <span className="text-sm font-bold">{commentCount}</span>
-                    </Button>
+                    </Link>
                     <ShareButton>
                         <Button variant="ghost" size="sm" className="text-sm p-1 h-6">
                             <Share2 className="size-5 mr-2" />

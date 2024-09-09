@@ -84,7 +84,6 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
 
 const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comment: CommentProps; depth?: number }) => {
 
-    console.log(depth)
     if (depth >= 3) return null;
     if(comment.parentComment !== null && depth == 0) return;
     const router = useRouter();

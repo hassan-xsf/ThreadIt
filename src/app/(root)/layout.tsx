@@ -19,9 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} text-black dark:text-white bg-white dark:bg-primary-black`} suppressHydrationWarning>
         <Providers>
-          <main className="max-w-screen flex dark:text-white text-gray-800 bg-white dark:bg-primary-black">
+          <main>
             <Navbar />
             <div className="flex-1 pt-16 p-6">
               {children}

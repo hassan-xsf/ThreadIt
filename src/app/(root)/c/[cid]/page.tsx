@@ -56,27 +56,23 @@ const page = ({ params }: { params: { cid: string } }) => {
             router.push("/sign-in")
         }
     }
-    return <>
+    return <> 
         {isError && <NotFound name={"Community"} />}
         {isLoading && <CommunityLoading />}
         {
             isSuccess &&
-            <div className="min-h-screen bg-gray-100 dark:bg-primary-black text-gray-900 dark:text-gray-100">
-                <div className="max-w-screen-xl mx-auto">
+            <div className="min-h-screen pl-44 mx-auto bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
+                <div className="w-[calc(100vw-30vw)] mx-auto min-w-96">
                     {/* Banner */}
-                    <div className="h-32 bg-primary-black dark:bg-white relative">
+                    <div className="h-40 relative">
                         {
                             data.data.data.c.banner ?
                                 <Image
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                    }}
-                                    width="900"
-                                    height="128"
+                                    width={1200} 
+                                    height={128} 
                                     src={data.data.data.c.banner}
                                     alt="Banner"
-                                    className="object-cover object-center"
+                                    className="w-full h-full object-cover object-center rounded-xl"
                                 />
                                 :
                                 <div className="w-full h-full object-fill">
@@ -118,9 +114,9 @@ const page = ({ params }: { params: { cid: string } }) => {
                                 {
                                     //yeah yeah should'n't have
                                     /// TODO
-                                    data.data.data.posts && data.data.data.posts.map((post : any) => (
+                                    data.data.data.posts && data.data.data.posts.map((post: any) => (
                                         <Post
-                                            comId = {cid}
+                                            comId={cid}
                                             key={post.id}
                                             id={post.id}
                                             author={post.User}
