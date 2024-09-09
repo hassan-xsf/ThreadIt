@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from './Button';
 import { useMutation } from '@tanstack/react-query';
-import { comment as commentService} from '@/services/comment';
+import { comment as commentService } from '@/services/comment';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { CommentProps } from '@/app/(root)/c/[cid]/post/[postId]/page';
@@ -36,52 +36,6 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
             content: "",
         },
     });
-
-
-
-
-
-    // const commentsTMP =
-    //     [
-    //         {
-    //             id: 1,
-    //             author: "user1",
-    //             content: "This is the final form of boss for flexbox.",
-    //             upvotes: 57,
-    //             replies: [
-    //                 {
-    //                     id: 2,
-    //                     author: "user2",
-    //                     content: "Agreed! It's a great learning tool.",
-    //                     upvotes: 12,
-    //                     replies: []
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             id: 3,
-    //             author: "user3",
-    //             content: "Thanks mate! I appreciate that. Any suggestions to improve?",
-    //             upvotes: 23,
-    //             replies: [
-    //                 {
-    //                     id: 4,
-    //                     author: "user4",
-    //                     content: "Maybe add some advanced levels with CSS Grid?",
-    //                     upvotes: 8,
-    //                     replies: [
-    //                         {
-    //                             id: 5,
-    //                             author: "user5",
-    //                             content: "That's a great idea! Would love to see that implemented.",
-    //                             upvotes: 5,
-    //                             replies: []
-    //                         }
-    //                     ]
-    //                 }
-    //             ]
-    //         }
-    //     ]
 
 
     const { mutate: commentMutate, isPending } = useMutation({
@@ -120,7 +74,7 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
             </form>
 
             {initialComments && initialComments.map(comment => (
-                <CommentComponent key={comment.id} postId = {postId}  comment={comment} />
+                <CommentComponent key={comment.id} postId={postId} comment={comment} />
             ))}
         </div>
     )
@@ -128,9 +82,11 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
 
 
 
-const CommentComponent = ({ postId , comment,  depth = 0 }: { postId: string , comment: CommentProps; depth?: number }) => {
+const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comment: CommentProps; depth?: number }) => {
 
-    console.log(comment)
+    console.log(depth)
+    if (depth >= 3) return null;
+    if(comment.parentComment !== null && depth == 0) return;
     const router = useRouter();
 
     const { handleSubmit: handleReply, register: replyRegister, formState: { errors: replyError }, reset: resetReply } = useForm({
@@ -146,7 +102,6 @@ const CommentComponent = ({ postId , comment,  depth = 0 }: { postId: string , c
     const { mutate: replyMutate, isPending } = useMutation({
         mutationFn: commentService,
         onSuccess: (res) => {
-            console.log(res)
             toast.success("Replied successfully!")
             router.refresh();
 
@@ -161,15 +116,14 @@ const CommentComponent = ({ postId , comment,  depth = 0 }: { postId: string , c
 
     const onReply = (e: z.infer<typeof submitCommentSchema>) => {
 
-        console.log({ content: e.content, postId, parentCommentId : comment.id })
 
-        replyMutate({ content: e.content, postId, parentCommentId : comment.id });
+        replyMutate({ content: e.content, postId, parentCommentId: comment.id });
 
         setShowReplyInput(false)
         resetReply();
     }
 
-    if (depth >= 5) return null;
+    
     return (
         <div className="mt-4 border-l-2 border-gray-200 dark:border-gray-700 pl-4">
             <div className="flex items-start space-x-2">
@@ -188,23 +142,22 @@ const CommentComponent = ({ postId , comment,  depth = 0 }: { postId: string , c
                     <p className="text-sm text-gray-600 dark:text-gray-300">{comment.content}</p>
                     <div className="flex items-center space-x-2 mt-1">
                         <Votes id={comment.id} votes={comment.votes} voteFor='Comment'>
-                            {/* <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigDown className="w-4 h-4" /></Button> */}
-                            {/* <Button variant="ghost" size="sm" className="text-xs p-0 h-auto"><ArrowBigUp className="w-4 h-4 mr-1" /> {comment.votes.length}</Button> */}
-                            <Button variant="ghost" size="sm" className="text-xs p-0 h-auto" onClick={() => setShowReplyInput(!showReplyInput)}>Reply</Button>
+                            {depth < 2 && <Button variant="ghost" size="sm" className="text-xs p-0 h-auto" onClick={() => setShowReplyInput(!showReplyInput)}>Reply</Button>}
                         </Votes>
                     </div>
                     {showReplyInput && (
                         <form onSubmit={handleReply(onReply)} className="mt-2">
                             <Input {...replyRegister('content')} placeholder="Write a reply..." className="text-sm rounded-full" />
                             {replyError.content && <p className="text-xs text-red-600 self-start">{replyError.content.message}</p>}
-                            <Button disabled = {isPending} type = "submit" size="sm" className="rounded-full mt-2 bg-gray-200 dark text-black">{isPending ? "Replying..." : "Reply"}</Button>
+                            <Button disabled={isPending} type="submit" size="sm" className="rounded-full mt-2 bg-gray-200 dark text-black">{isPending ? "Replying..." : "Reply"}</Button>
                         </form>
                     )}
                 </div>
             </div>
-            {/* {comment.replies.map(reply => (
-                <CommentComponent key={reply.id} comment={reply} depth={depth + 1} />
-            ))} */}
+
+            {comment.children && comment.children.map(reply => (
+                <CommentComponent postId={postId} key={reply.id} comment={reply as CommentProps} depth={depth + 1} />
+            ))}
         </div>
     );
 };

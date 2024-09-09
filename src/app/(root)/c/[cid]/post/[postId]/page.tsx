@@ -11,10 +11,13 @@ import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
 import { Comment, Vote } from "@prisma/client"
 import { MessageSquare, MoreHorizontal, Share2 } from "lucide-react"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
 
 
 
-type PostProps = {
+export type PostProps = {
+    comId?: string
     id: string,
     author: {
         name: string,
@@ -26,7 +29,9 @@ type PostProps = {
     votes: Vote[];
     commentCount: number;
     timeAgo: string;
-    comments: CommentProps[]
+    comments: CommentProps[];
+    commentsDisabled?: boolean;
+    children?: React.ReactNode
 }
 
 export type CommentProps = Comment & {
@@ -35,16 +40,23 @@ export type CommentProps = Comment & {
         image: string,
     }
     votes: Vote[]
+    parentComment?: Comment,
+    children?: Comment[]
 }
 
 
-export default async function page({ params }: { params: { postId: string} }) {
+export default async function page({ params }: { params: { postId: string, cid: string } }) {
 
-    const { postId } = params;
+    const { postId, cid } = params;
+    console.log(params)
     // TODO
     // Shouldn't have used this, but am lazy rn.
 
     let postDetails: Record<any, any> | null = null;
+
+    // As far as I am aware Prisma doesn't support recursive queries like this, Or am I missing something?
+    // TODO
+    /// This thing manually-x find's the replies until third level.
     if (postId) {
         postDetails = await db.post.findUnique({
             where: {
@@ -77,18 +89,74 @@ export default async function page({ params }: { params: { postId: string} }) {
                             }
                         },
                         votes: true,
+
+                        // First level of children
+                        children: {
+                            select: {
+                                id: true,
+                                content: true,
+                                createdAt: true,
+                                commentId: true,
+                                parentComment: true,
+                                commentOwner: {
+                                    select: {
+                                        name: true,
+                                        image: true,
+                                    }
+                                },
+                                votes: true,
+
+                                // Second level of children (children of children)
+                                children: {
+                                    select: {
+                                        id: true,
+                                        content: true,
+                                        createdAt: true,
+                                        commentId: true,
+                                        parentComment: true,
+                                        commentOwner: {
+                                            select: {
+                                                name: true,
+                                                image: true,
+                                            }
+                                        },
+                                        votes: true,
+
+                                        // Third level of children (children of children of children)
+                                        children: {
+                                            select: {
+                                                id: true,
+                                                content: true,
+                                                createdAt: true,
+                                                commentId: true,
+                                                parentComment: true,
+                                                commentOwner: {
+                                                    select: {
+                                                        name: true,
+                                                        image: true,
+                                                    }
+                                                },
+                                                votes: true,
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     orderBy: {
                         createdAt: 'desc'
                     }
                 }
             }
-        })
+        });
+
     }
     return (
         !postDetails ? <NotFound name="Post" />
             :
             <Post
+                comId={cid}
                 id={postDetails.id}
                 author={postDetails.User}
                 title={postDetails.heading}
@@ -102,29 +170,27 @@ export default async function page({ params }: { params: { postId: string} }) {
     )
 }
 
-
-
-
-
-function Post({ id, author, title, content, image, votes, commentCount, timeAgo, comments }: PostProps) {
+export function Post({ comId, id, author, title, content, image, votes, commentCount, timeAgo, comments, commentsDisabled = false, children }: PostProps) {
     return (
         <div className="w-[calc(100vw-20rem)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
-            <Card className="w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
-                <CardHeader className="flex items-start space-x-4">
-                    <div className="flex-grow">
-                        <div className="flex items-center space-x-2">
-                            <UserAvatar name={author.name} image={author.image} />
-                            <span className="text-sm font-semibold">{author.name}</span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">• {timeAgo}</span>
+            <Card className={cn("h-full w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100", commentsDisabled ? "cursor-pointer hover:dark:bg-zinc-800 hover:bg-gray-100" : "cursor-none")} >
+                <Link href={`/c/${comId}/post/${id}`} className = {` ${commentsDisabled || "cursor-auto"} `}>
+                    <CardHeader className="flex items-start space-x-4">
+                        <div className="flex-grow">
+                            <div className="flex items-center space-x-2">
+                                <UserAvatar name={author.name} image={author.image} />
+                                <span className="text-sm font-semibold">{author.name}</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">• {timeAgo}</span>
+                            </div>
+                            <h2 className="text-xl font-bold mt-2">{title}</h2>
                         </div>
-                        <h2 className="text-xl font-bold mt-2">{title}</h2>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
-                    <p className="text-sm break-all">{content}</p>
-                </CardContent>
-                <Votes id={id} votes={votes} voteFor = {'Post'}>
+                    </CardHeader>
+                    <CardContent>
+                        {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
+                        <p className="text-sm break-all">{content}</p>
+                    </CardContent>
+                </Link>
+                <Votes id={id} votes={votes} voteFor={'Post'}>
                     <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
                         <MessageSquare className="size-6 mr-1" />
                         <span className="text-sm font-bold">{commentCount}</span>
@@ -139,11 +205,14 @@ function Post({ id, author, title, content, image, votes, commentCount, timeAgo,
                         <MoreHorizontal className="size-5" />
                     </Button>
                 </Votes>
-                <CommentBox postId={id} initialComments={comments} />
+                {!commentsDisabled && <CommentBox postId={id} initialComments={comments} />}
             </Card>
-            <div className="hidden lg:block w-[25%]">
-                <RightSideRules enableShowOff={true} />
-            </div>
-        </div>
+            {
+                <div className="hidden lg:block w-[25%]">
+                    {children}
+                    <RightSideRules enableShowOff={true} />
+                </div>
+            }
+        </div >
     )
 }

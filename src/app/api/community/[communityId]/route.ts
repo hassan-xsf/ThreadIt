@@ -35,11 +35,104 @@ export async function GET(req: Request, { params }: { params: { communityId: str
             );
         }
 
+        // const data = await db.post.findMany({
+        //     where: {
+        //         communityId
+        //     },
+        // })
+
         const data = await db.post.findMany({
             where: {
                 communityId
             },
-        })
+            select: {
+                id: true,
+                heading: true,
+                content: true,
+                postImage: true,
+                createdAt: true,
+                User: {
+                    select: {
+                        name: true,
+                        image: true,
+                    }
+                },
+                votes: true,
+                comments: {
+                    select: {
+                        id: true,
+                        content: true,
+                        createdAt: true,
+                        commentId: true,
+                        parentComment: true,
+                        commentOwner: {
+                            select: {
+                                name: true,
+                                image: true,
+                            }
+                        },
+                        votes: true,
+
+                        // First level of children
+                        children: {
+                            select: {
+                                id: true,
+                                content: true,
+                                createdAt: true,
+                                commentId: true,
+                                parentComment: true,
+                                commentOwner: {
+                                    select: {
+                                        name: true,
+                                        image: true,
+                                    }
+                                },
+                                votes: true,
+
+                                // Second level of children (children of children)
+                                children: {
+                                    select: {
+                                        id: true,
+                                        content: true,
+                                        createdAt: true,
+                                        commentId: true,
+                                        parentComment: true,
+                                        commentOwner: {
+                                            select: {
+                                                name: true,
+                                                image: true,
+                                            }
+                                        },
+                                        votes: true,
+
+                                        // Third level of children (children of children of children)
+                                        children: {
+                                            select: {
+                                                id: true,
+                                                content: true,
+                                                createdAt: true,
+                                                commentId: true,
+                                                parentComment: true,
+                                                commentOwner: {
+                                                    select: {
+                                                        name: true,
+                                                        image: true,
+                                                    }
+                                                },
+                                                votes: true,
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                }
+            }
+        });
         let isJoined = false;
 
         if(session) {
@@ -51,7 +144,7 @@ export async function GET(req: Request, { params }: { params: { communityId: str
                     joinedCommunities: true,
                 },
             })
-            isJoined = joinedComs!.joinedCommunities.some(community => community.id === communityId);
+            if(joinedComs?.joinedCommunities) isJoined = joinedComs!.joinedCommunities.some(community => community.id === communityId);
         }
 
         return NextResponse.json({
