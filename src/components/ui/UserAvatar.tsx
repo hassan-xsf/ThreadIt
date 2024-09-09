@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-const UserAvatar = ({ name, image, size = "7" }: { name: string | undefined | null, image: string | undefined | null, size?: string }) => {
+const UserAvatar = ({ name, image, size = 7 }: { name: string | undefined | null, image: string | undefined | null, size?: number }) => {
     return (
         <Avatar className={`size-${size}`}>
             {

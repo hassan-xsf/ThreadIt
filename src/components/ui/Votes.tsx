@@ -1,10 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import ShareButton from "@/components/ui/ShareButton"
 import { CardFooter, } from "@/components/ui/card"
-import { Button } from "@/components/ui/Button"
-import { ArrowBigUp, ArrowBigDown, MessageSquare, Share2, MoreHorizontal, Loader2 } from 'lucide-react'
+import { ArrowBigUp, ArrowBigDown , Loader2 } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import { vote } from '@/services/vote'
 import { AxiosError } from 'axios'
@@ -15,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 
-const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes: Vote[], commentCount: number }) => {
+const Votes = ({ postId, votes , children }: { postId: string, votes: Vote[] , children: React.ReactNode }) => {
 
     const {data: session} = useSession();
     const router = useRouter();
@@ -91,22 +89,9 @@ const CommentFooter = ({ postId, votes, commentCount }: { postId: string, votes:
                     </button>
                 </div>
             </div>
-        
-            <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
-                <MessageSquare className="size-6 mr-1" />
-                <span className="text-sm font-bold">{commentCount}</span>
-            </Button>
-            <ShareButton>
-                <Button variant="ghost" size="sm" className="text-sm p-1 h-6">
-                    <Share2 className="size-5 mr-2" />
-                    Share
-                </Button>
-            </ShareButton>
-            <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
-                <MoreHorizontal className="size-5" />
-            </Button>
+            {children}
         </CardFooter>
     )
 }
 
-export default CommentFooter
+export default Votes

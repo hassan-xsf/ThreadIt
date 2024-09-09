@@ -73,7 +73,7 @@ const page = ({ params }: { params: { cid: string } }) => {
                                     height="128"
                                     src={data.data.data.c.banner}
                                     alt="Banner"
-                                    className="object-contain"
+                                    className="object-cover object-center"
                                 />
                                 :
                                 <div className="w-full h-full object-fill">

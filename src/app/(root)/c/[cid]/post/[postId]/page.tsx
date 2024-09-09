@@ -1,13 +1,16 @@
 
+import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import CommentBox from "@/components/ui/CommentBox"
-import CommentFooter from "@/components/ui/CommentFooter"
+import Votes from "@/components/ui/Votes"
 import NotFound from "@/components/ui/NotFound"
 import RightSideRules from "@/components/ui/RightSideRules"
+import ShareButton from "@/components/ui/ShareButton"
 import UserAvatar from "@/components/ui/UserAvatar"
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
 import { Comment, Vote } from "@prisma/client"
+import { MessageSquare, MoreHorizontal, Share2 } from "lucide-react"
 
 
 
@@ -23,13 +26,21 @@ type PostProps = {
     votes: Vote[];
     commentCount: number;
     timeAgo: string;
-    comments: Comment[]
+    comments: CommentProps[]
+}
+
+export type CommentProps = Comment & {
+    commentOwner: {
+        name: string,
+        image: string,
+    }
+    votes: Vote[]
 }
 
 
-export default async function page({ params }: { params: { postId: string , cid: string } }) {
+export default async function page({ params }: { params: { postId: string, cid: string } }) {
 
-    const { postId , cid } = params;
+    const { postId, cid } = params;
     // TODO
     // Shouldn't have used this, but am lazy rn.
 
@@ -58,13 +69,22 @@ export default async function page({ params }: { params: { postId: string , cid:
                         content: true,
                         createdAt: true,
                         commentId: true,
-                        userId: true
+                        parentComment: true,
+                        commentOwner: {
+                            select: {
+                                name: true,
+                                image: true,
+                            }
+                        },
+                        votes: true,
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
                     }
                 }
             }
         })
     }
-
     return (
         !postDetails ? <NotFound name="Post" />
             :
@@ -75,7 +95,7 @@ export default async function page({ params }: { params: { postId: string , cid:
                 content={postDetails.content}
                 image={postDetails.postImage || undefined}
                 votes={postDetails.votes}
-                commentCount={47}
+                commentCount={postDetails.comments.length || 0}
                 timeAgo={timeAgo(postDetails.createdAt)}
                 comments={postDetails.comments}
             />
@@ -86,7 +106,7 @@ export default async function page({ params }: { params: { postId: string , cid:
 
 
 
-function Post({id, author, title, content, image, votes, commentCount, timeAgo, comments }: PostProps) {
+function Post({ id, author, title, content, image, votes, commentCount, timeAgo, comments }: PostProps) {
     return (
         <div className="w-[calc(100vw-20rem)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
             <Card className="w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
@@ -104,8 +124,22 @@ function Post({id, author, title, content, image, votes, commentCount, timeAgo, 
                     {image && <img src={image} alt={title} className="w-full rounded-md mb-4" />}
                     <p className="text-sm break-all">{content}</p>
                 </CardContent>
-                <CommentFooter postId={id} votes={votes} commentCount={commentCount} />
-                <CommentBox postId = {id} comments={comments} />
+                <Votes postId={id} votes={votes}>
+                    <Button variant="ghost" size="lg" className="text-xs p-1 h-6">
+                        <MessageSquare className="size-6 mr-1" />
+                        <span className="text-sm font-bold">{commentCount}</span>
+                    </Button>
+                    <ShareButton>
+                        <Button variant="ghost" size="sm" className="text-sm p-1 h-6">
+                            <Share2 className="size-5 mr-2" />
+                            Share
+                        </Button>
+                    </ShareButton>
+                    <Button variant="ghost" size="sm" className="text-xs p-1 h-6">
+                        <MoreHorizontal className="size-5" />
+                    </Button>
+                </Votes>
+                <CommentBox postId={id} initialComments={comments} />
             </Card>
             <div className="hidden lg:block w-[25%]">
                 <RightSideRules enableShowOff={true} />
