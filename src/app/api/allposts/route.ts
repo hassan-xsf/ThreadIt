@@ -10,8 +10,8 @@ export async function GET(req : NextRequest) {
         const { searchParams } = req.nextUrl;
 
         const feed = searchParams.get('feed') || 'home';
-        const skip = parseInt(searchParams.get('skip') || '0', 2);
-        const take = parseInt(searchParams.get('take') || '10', 2);
+        const skip = parseInt(searchParams.get('skip') || '0')
+        const take = parseInt(searchParams.get('take') || '2')
 
         const session = await getAuthSession()
 
@@ -43,8 +43,8 @@ export async function GET(req : NextRequest) {
                 },
             });
             if (coms?.joinedCommunities?.length) {
-                console.log(coms.joinedCommunities);
                 const communityIds = coms.joinedCommunities.map(c => c.id);
+                console.log(communityIds);
                 where = {
                     communityId: {
                         in: communityIds,
@@ -56,8 +56,8 @@ export async function GET(req : NextRequest) {
         const posts = await db.post.findMany({
             orderBy,
             where,
-            take,
-            skip,
+            take: take || 2,
+            skip: skip || 0,
             include: {
                 community: true,
                 User: {
@@ -75,11 +75,14 @@ export async function GET(req : NextRequest) {
                 },
             }
         })
+        const totalPosts = await db.post.count({where});
+        const hasNextPage = skip + take < totalPosts;
 
         return NextResponse.json({
             success: true,
             message: "Posts has been retrieved successfully.",
             data: posts,
+            nextPage: hasNextPage,
         },
             { status: 201 }
         );
