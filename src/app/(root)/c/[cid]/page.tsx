@@ -6,14 +6,14 @@ import { getCommunity, joinCommunity } from '@/services/community'
 import { Button } from '@/components/ui/Button'
 import CommunityLoading from './loading'
 import { useSession } from 'next-auth/react'
-import UserAvatar from '@/components/ui/UserAvatar'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import NotFound from '@/components/ui/NotFound'
 import timeAgo from '@/lib/timeAgo'
-import { Post } from './post/[postId]/page'
+import Post from "@/components/ui/Post"
+import LeftSidebar from '@/components/ui/LeftSidebar'
 
 
 const page = ({ params }: { params: { cid: string } }) => {
@@ -28,12 +28,12 @@ const page = ({ params }: { params: { cid: string } }) => {
         queryKey: ['community', cid],
         queryFn: () => getCommunity(cid),
         retry: false,
-        enabled: !!cid
+        enabled: !!cid,
+        
     })
 
     useEffect(() => {
         if (data) {
-            console.log(data.data.data.posts)
             setcomMembers(data.data.data.c._count.members)
             setisJoined(data.data.data.isjoined)
         }
@@ -56,7 +56,7 @@ const page = ({ params }: { params: { cid: string } }) => {
             router.push("/sign-in")
         }
     }
-    return <> 
+    return <>
         {isError && <NotFound name={"Community"} />}
         {isLoading && <CommunityLoading />}
         {
@@ -68,8 +68,8 @@ const page = ({ params }: { params: { cid: string } }) => {
                         {
                             data.data.data.c.banner ?
                                 <Image
-                                    width={1200} 
-                                    height={128} 
+                                    width={1200}
+                                    height={128}
                                     src={data.data.data.c.banner}
                                     alt="Banner"
                                     className="w-full h-full object-cover object-center rounded-xl"
@@ -107,87 +107,38 @@ const page = ({ params }: { params: { cid: string } }) => {
                         </div>
                     </header>
 
-                    <div className="flex mt-4">
+                    <div className="flex">
                         {/* Main content area */}
-                        <main className="flex-grow pr-4">
-                            <div className="bg-white dark:bg-primary-black p-4 rounded-md shadow-sm">
-                                {
-                                    //yeah yeah should'n't have
-                                    /// TODO
-                                    data.data.data.posts && data.data.data.posts.map((post: any) => (
-                                        <Post
-                                            comId={cid}
-                                            key={post.id}
-                                            id={post.id}
-                                            author={post.User}
-                                            title={post.heading}
-                                            content={post.content}
-                                            image={post.postImage || undefined}
-                                            votes={post.votes}
-                                            commentCount={post.comments.length || 0}
-                                            timeAgo={timeAgo(post.createdAt)}
-                                            comments={post.comments}
-                                            commentsDisabled={true}
-                                        >
-                                            <div className="bg-white dark:bg-zinc-950 p-4 rounded-xl shadow-sm mb-4">
-                                                <h2 className="text-lg font-semibold mb-2">{data.data.data.c.name}</h2>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                                    {data.data.data.c.description || "No description found!"}
-                                                </p>
-                                                <div className="flex justify-between text-sm">
-                                                    <div>
-                                                        <p className="font-bold">{commMembers}</p>
-                                                        <p className="text-gray-600 dark:text-gray-400">Members</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {
-                                                session?.user &&
-                                                <div className="bg-white dark:bg-zinc-950 p-4 rounded-xl shadow-sm mb-4">
-                                                    <h3 className="text-lg font-semibold mb-2">USER</h3>
-                                                    <div className="flex items-center space-x-2">
-                                                        <UserAvatar image={session.user.image} name={session.user.name} />
-                                                        <div>
-                                                            <p className="font-medium">{session.user.name}</p>
-                                                            <p className="text-sm text-gray-600 dark:text-gray-400">Hello there :)</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                        </Post>
-                                    ))
-                                }
-                            </div>
-                        </main>
-
-                        {/* Sidebar */}
-                        <aside className={`${data.data.data.posts ? "hidden" : "block"} w-80`}>
-                            <div className="bg-white dark:bg-zinc-950 p-4 rounded-xl shadow-sm mb-4">
-                                <h2 className="text-lg font-semibold mb-2">{data.data.data.c.name}</h2>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                    {data.data.data.c.description || "No description found!"}
-                                </p>
-                                <div className="flex justify-between text-sm">
-                                    <div>
-                                        <p className="font-bold">{commMembers}</p>
-                                        <p className="text-gray-600 dark:text-gray-400">Members</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className = "order-10 pt-20 w-1/4">
+                            <LeftSidebar name={data.data.data.name} description={data.data.data.c.description} members={commMembers} session={session} />
+                        </div>
+                        
+                        <div className="bg-white dark:bg-primary-black p-4 rounded-md shadow-sm">
                             {
-                                session?.user &&
-                                <div className="bg-white dark:bg-zinc-950 p-4 rounded-xl shadow-sm">
-                                    <h3 className="text-lg font-semibold mb-2">USER</h3>
-                                    <div className="flex items-center space-x-2">
-                                        <UserAvatar image={session.user.image} name={session.user.name} />
-                                        <div>
-                                            <p className="font-medium">{session.user.name}</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Hello there :)</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                //yeah yeah should'n't have
+                                /// TODO
+                                data.data.data.posts && data.data.data.posts.map((post: any) => (
+                                    <Post
+                                        comId={cid}
+                                        comName = {data.data.data.c.name}
+                                        comProfile = {data.data.data.c.profile || ""}
+                                        key={post.id}
+                                        id={post.id}
+                                        author={post.User}
+                                        title={post.heading}
+                                        content={post.content}
+                                        image={post.postImage || undefined}
+                                        votes={post.votes}
+                                        commentCount={post.comments.length || 0}
+                                        timeAgo={timeAgo(post.createdAt)}
+                                        comments={post.comments}
+                                        commentsDisabled={true}
+                                    />
+                                ))
                             }
-                        </aside>
+
+
+                        </div>
                     </div>
                 </div>
             </div>

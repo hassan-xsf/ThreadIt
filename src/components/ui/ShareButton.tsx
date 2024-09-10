@@ -18,14 +18,14 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { useEffect, useRef, useState } from "react"
 
-const ShareButton = ({children} : {children : React.ReactElement}) => {
+const ShareButton = ({link , children} : {link: string ,children : React.ReactElement}) => {
 
     const [copyLink , setcopyLink] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null);
 
 
     useEffect(() => {
-        setcopyLink(window.location.host + window.location.pathname)
+        setcopyLink(window.location.host + link)
     } , [])
 
     const handleCopy = () => {

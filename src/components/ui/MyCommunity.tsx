@@ -4,6 +4,7 @@ import { Session } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import CommunityAvatar from './CommunityAvatar'
 
 
 const MyCommunity = async ({ session }: { session: Session }) => {
@@ -26,17 +27,7 @@ const MyCommunity = async ({ session }: { session: Session }) => {
         <>
             {
                 coms?.joinedCommunities.map((c: Community, index: number) => (
-                    <Link href = {`/c/${c.id}`} key={index} className="flex items-center space-x-2">
-                        {
-                            c.profile ?
-                                <Image src={c.profile} width="50" height="50" alt="Profile" className="size-7 rounded-full"/>
-                                :
-                                <div className="size-7 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold">
-                                    {c.name[0]}
-                                </div>
-                        }
-                        <span className = "text-sm">c/{c.name}</span>
-                    </Link>
+                    <CommunityAvatar key={index} id={c.id} name={c.name} profile={c.profile || ""} />
                 ))
             }
         </>

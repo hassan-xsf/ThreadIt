@@ -1,22 +1,33 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CreatePost from "@/components/ui/CreatePost"
 import { db } from "@/lib/db"
 import NotFound from "@/components/ui/NotFound"
-import RightSideRules from "@/components/ui/RightSideRules"
+import LeftSidebar from "@/components/ui/LeftSidebar"
 
 export default async function page({ params }: { params: { cid: string } }) {
     const session = await getServerSession(authOptions)
     const { cid } = params;
 
-    const coms = await db.community.findUnique({
+    const coms = await db.community.findFirst({
         where: {
-            id: cid,
+            id: cid
         },
-    });
+        select: {
+            id: true,
+            name: true,
+            banner: true,
+            profile: true,
+            description: true,
+            createdAt: true,
+            _count: {
+                select: { members: true },
+            },
+        },
+    })
+
     return <>
         {!coms ? <NotFound name="Community" />
             :
@@ -30,18 +41,10 @@ export default async function page({ params }: { params: { cid: string } }) {
                     </div>
                     <CreatePost cid={cid} />
                 </div>
-                <div className="hidden lg:block lg:w-2/3 lg:pl-8">
-                    <RightSideRules/>
-                    <Card className="mb-4 bg-gray-100 dark:bg-primary-black">
-                        <CardHeader>
-                            <CardTitle className="text-lg">USER</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex items-center space-x-2">
-                            <UserAvatar image={session.user.image} name={session?.user.name} /><span className="text-md font-medium dark:text-white">{session.user.name}</span>
-                        </CardContent>
-                    </Card>
+                <div className="w-1/2">
+                    <LeftSidebar name={coms.name} description={coms.description || ""} members={coms._count.members} session={session} />
                 </div>
-            </div>
+            </div >
         }
     </>
 }

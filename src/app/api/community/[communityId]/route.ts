@@ -34,13 +34,6 @@ export async function GET(req: Request, { params }: { params: { communityId: str
                 { status: 400 }
             );
         }
-
-        // const data = await db.post.findMany({
-        //     where: {
-        //         communityId
-        //     },
-        // })
-
         const data = await db.post.findMany({
             where: {
                 communityId
