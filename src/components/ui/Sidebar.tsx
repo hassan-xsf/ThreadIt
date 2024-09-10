@@ -1,12 +1,12 @@
-import { authOptions } from '@/lib/auth'
+import { getAuthSession } from '@/lib/auth'
 import { Home, TrendingUp, Compass, List, Plus, Info, HelpCircle } from 'lucide-react'
-import { getServerSession } from 'next-auth'
+
 import Link from 'next/link'
 import MyCommunity from './MyCommunity'
 
 const Sidebar = async () => {
 
-    const data = await getServerSession(authOptions)
+    const data = await getAuthSession();
 
     return (
         <aside className="w-64 bg-white min-h-screen dark:bg-black border-r border-gray-200 dark:border-gray-700 pt-16 overflow-y-auto fixed top-0">

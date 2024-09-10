@@ -2,14 +2,13 @@
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getAuthSession } from "@/lib/auth";
 
 
 export async function GET(req: Request, { params }: { params: { communityId: string } }) {
     try {
         const { communityId } = params;
-        const  session = await getServerSession(authOptions)     
+        const session = await getAuthSession();  
         const communityExists = await db.community.findFirst({
             where: {
                 id: communityId

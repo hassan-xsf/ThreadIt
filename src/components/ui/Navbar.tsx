@@ -1,17 +1,16 @@
 import React from 'react'
 import { buttonVariants } from "@/components/ui/Button"
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { Search } from 'lucide-react'
 import ThemeBtn from './ThemeBtn'
 import { cn } from '@/lib/utils'
 import Sidebar from './Sidebar'
 import UserAccount from './UserAccount'
+import { getAuthSession } from '@/lib/auth'
 
 const Navbar = async () => {
 
-    const data = await getServerSession(authOptions)
+    const data = await getAuthSession();
     return (
         <>
             <nav className="fixed top-0 py-2 px-2 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 flex items-center justify-between z-10">

@@ -47,6 +47,7 @@ const page = ({ params }: { params: { cid: string } }) => {
             toast.info(res.data.message)
             setcomMembers(prev => prev + (res.data.data.isJoined ? 1 : -1))
             setisJoined(prev => !prev)
+            router.refresh();
         },
     })
     const handleJoin = () => {

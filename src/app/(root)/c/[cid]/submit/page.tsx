@@ -1,6 +1,5 @@
 
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { getAuthSession } from "@/lib/auth"
 import UserAvatar from "@/components/ui/UserAvatar"
 import CreatePost from "@/components/ui/CreatePost"
 import { db } from "@/lib/db"
@@ -8,7 +7,7 @@ import NotFound from "@/components/ui/NotFound"
 import LeftSidebar from "@/components/ui/LeftSidebar"
 
 export default async function page({ params }: { params: { cid: string } }) {
-    const session = await getServerSession(authOptions)
+    const session = await getAuthSession();
     const { cid } = params;
 
     const coms = await db.community.findFirst({

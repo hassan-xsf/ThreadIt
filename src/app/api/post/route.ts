@@ -89,7 +89,7 @@ export async function POST(req: Request) {
         console.log(error)
         return NextResponse.json({
             success: false,
-            message: "There was a problem creating the community, Please try again later.",
+            message: "There was a problem creating the post, Please try again later.",
         },
             { status: 500 }
         );

@@ -2,15 +2,14 @@
 import NoPostsAvailable from "@/components/ui/NoPostAvailable";
 import Post from "@/components/ui/Post";
 import { PostSkeleton } from "@/components/ui/PostSkeleton";
-import { authOptions } from "@/lib/auth";
+import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import timeAgo from "@/lib/timeAgo";
-import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 
 export default async function page({ searchParams }: { searchParams: { feed: string } }) {
 
-  const session = await getServerSession(authOptions)
+  const session = await getAuthSession();
   const { feed } = searchParams;
 
   let orderBy: Record<any, any> = { createdAt: 'desc' };
@@ -40,6 +39,7 @@ export default async function page({ searchParams }: { searchParams: { feed: str
       },
     });
     if (coms?.joinedCommunities?.length) {
+      console.log(coms.joinedCommunities);
       const communityIds = coms.joinedCommunities.map(c => c.id); 
       where = {
         communityId: {
@@ -47,12 +47,16 @@ export default async function page({ searchParams }: { searchParams: { feed: str
         },
       };
     }
+    else {
+      return <NoPostsAvailable/>
+    }
   }
 
   const posts = await db.post.findMany({
     orderBy,
     where,
     take: 10,
+
     include: {
       community: true,
       User: {
@@ -96,8 +100,6 @@ export default async function page({ searchParams }: { searchParams: { feed: str
             ))
           ) : (
             <>
-              <NoPostsAvailable />
-              <NoPostsAvailable />
               <NoPostsAvailable />
             </>
           )}
