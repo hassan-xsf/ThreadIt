@@ -16,7 +16,7 @@ export default function page() {
   const [posts, setPost] = useState<any>([]);
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(2);
-  const [nextPage, setNextPage] = useState(false)
+  const [nextPage, setNextPage] = useState(true)
 
 
 
@@ -27,6 +27,7 @@ export default function page() {
     queryKey: ['allPosts', { feed, skip, take }],
     queryFn: () => allPosts({ feed, skip, take }),
     placeholderData: keepPreviousData,
+    enabled: nextPage
   })
 
   useEffect(() => {
