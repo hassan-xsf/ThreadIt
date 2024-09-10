@@ -32,6 +32,7 @@ export type PostProps = {
     comments: CommentProps[];
     commentsDisabled?: boolean;
     children?: React.ReactNode
+    index?: number
 }
 
 export type CommentProps = Comment & {
@@ -170,7 +171,7 @@ export default async function page({ params }: { params: { postId: string, cid: 
     )
 }
 
-export function Post({ comId, id, author, title, content, image, votes, commentCount, timeAgo, comments, commentsDisabled = false, children }: PostProps) {
+export function Post({ comId, id, author, title, content, image, votes, commentCount, timeAgo, comments, commentsDisabled = false, children , index = 0}: PostProps) {
     return (
         <div className="w-[calc(100vw-30vw)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
             <Card className={cn("h-full w-[90%] sm:w-[70%] lg:w-[40%] bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100", commentsDisabled ? "cursor-pointer hover:dark:bg-zinc-800 hover:bg-gray-100" : "cursor-none")} >
@@ -207,7 +208,7 @@ export function Post({ comId, id, author, title, content, image, votes, commentC
                 </Votes>
                 {!commentsDisabled && <CommentBox postId={id} initialComments={comments} />}
             </Card>
-            {
+            { index === 0 &&
                 <div className="hidden lg:block w-[25%]">
                     {children}
                     <RightSideRules enableShowOff={true} />

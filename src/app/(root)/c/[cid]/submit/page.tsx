@@ -21,8 +21,8 @@ export default async function page({ params }: { params: { cid: string } }) {
         {!coms ? <NotFound name="Community" />
             :
             session &&
-            <div className="flex justify-center p-4 bg-white dark:bg-primary-black">
-                <div className="w-full max-w-4xl space-y-6">
+            <div className="min-h-screen pl-44 flex justify-center p-4 max-w-screen-xl mx-auto bg-white dark:bg-primary-black">
+                <div className="space-y-6 w-full">
                     <h1 className="text-2xl font-bold dark:text-white">Create post as</h1>
                     <div className="flex items-center space-x-2">
                         <UserAvatar image={session.user.image} name={session?.user.name} />
@@ -30,7 +30,7 @@ export default async function page({ params }: { params: { cid: string } }) {
                     </div>
                     <CreatePost cid={cid} />
                 </div>
-                <div className="hidden lg:block lg:w-1/3 lg:pl-8">
+                <div className="hidden lg:block lg:w-2/3 lg:pl-8">
                     <RightSideRules/>
                     <Card className="mb-4 bg-gray-100 dark:bg-primary-black">
                         <CardHeader>
