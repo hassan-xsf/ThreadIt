@@ -32,7 +32,6 @@ export default function page() {
 
   useEffect(() => {
     if (data) {
-      console.log(data.data)
       setNextPage(!!data.data.nextPage)
       //@ts-ignore TODO
       setPost(prev => [...prev, ...data.data.data]);
@@ -41,7 +40,6 @@ export default function page() {
 
   useEffect(() => {
     if (inView) {
-      console.log(nextPage)
       setSkip(prev => prev + take);
       setTake(2);
     }
