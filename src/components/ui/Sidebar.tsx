@@ -18,7 +18,7 @@ const Sidebar = async () => {
                         { icon: Compass, label: 'Explore' },
                         { icon: List, label: 'All' },
                     ].map((item, index) => (
-                        <Link  href={`/?feed=${item.label.toLowerCase()}`} key={index} className="flex items-center gap-4 font-light text-sm py-1">
+                        <Link href={`/?feed=${item.label.toLowerCase()}`} key={index} className="flex items-center gap-4 font-light text-sm py-1">
                             <div className="p-1 rounded-full">
                                 <item.icon size={20} className="dark:text-white text-black" />
                             </div>

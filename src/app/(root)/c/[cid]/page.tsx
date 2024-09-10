@@ -14,6 +14,7 @@ import NotFound from '@/components/ui/NotFound'
 import timeAgo from '@/lib/timeAgo'
 import Post from "@/components/ui/Post"
 import LeftSidebar from '@/components/ui/LeftSidebar'
+import NoPostsAvailable from '@/components/ui/NoPostAvailable'
 
 
 const page = ({ params }: { params: { cid: string } }) => {
@@ -29,7 +30,7 @@ const page = ({ params }: { params: { cid: string } }) => {
         queryFn: () => getCommunity(cid),
         retry: false,
         enabled: !!cid,
-        
+
     })
 
     useEffect(() => {
@@ -75,8 +76,14 @@ const page = ({ params }: { params: { cid: string } }) => {
                                     className="w-full h-full object-cover object-center rounded-xl"
                                 />
                                 :
-                                <div className="w-full h-full object-fill">
-                                </div>
+                                <Image
+                                    unoptimized
+                                    width={1200}
+                                    height={128}
+                                    src={`https://api.dicebear.com/6.x/initials/svg?seed=${data.data.data.c.name!}`}
+                                    alt="Banner"
+                                    className="w-full h-full object-cover object-center rounded-xl"
+                                />
                         }
                         <div className="absolute -bottom-8 left-4 flex items-end">
                             {
@@ -109,10 +116,10 @@ const page = ({ params }: { params: { cid: string } }) => {
 
                     <div className="flex">
                         {/* Main content area */}
-                        <div className = "order-10 pt-20 w-1/4">
+                        <div className="order-10 pt-20 w-1/4">
                             <LeftSidebar name={data.data.data.name} description={data.data.data.c.description} members={commMembers} session={session} />
                         </div>
-                        
+
                         <div className="bg-white dark:bg-primary-black p-4 rounded-md shadow-sm">
                             {
                                 //yeah yeah should'n't have
@@ -120,8 +127,8 @@ const page = ({ params }: { params: { cid: string } }) => {
                                 data.data.data.posts && data.data.data.posts.map((post: any) => (
                                     <Post
                                         comId={cid}
-                                        comName = {data.data.data.c.name}
-                                        comProfile = {data.data.data.c.profile || ""}
+                                        comName={data.data.data.c.name}
+                                        comProfile={data.data.data.c.profile || ""}
                                         key={post.id}
                                         id={post.id}
                                         author={post.User}
@@ -135,9 +142,11 @@ const page = ({ params }: { params: { cid: string } }) => {
                                         commentsDisabled={true}
                                     />
                                 ))
+
                             }
-
-
+                            <div className="w-[calc(100vw-60vw)] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
+                                {data.data.data.posts.length > 0 || <div className="text-2xl">No Posts Available..</div>}
+                            </div>
                         </div>
                     </div>
                 </div>
