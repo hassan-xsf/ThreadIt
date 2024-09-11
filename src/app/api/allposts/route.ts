@@ -57,7 +57,6 @@ export async function GET(req : NextRequest) {
         }
 
         const posts = await db.post.findMany({
-            orderBy,
             where,
             take: take || 2,
             skip: skip || 0,
@@ -76,7 +75,8 @@ export async function GET(req : NextRequest) {
                         comments: true
                     },
                 },
-            }
+            },
+            orderBy,
         })
         const totalPosts = await db.post.count({where});
         const hasNextPage = skip + take < totalPosts;

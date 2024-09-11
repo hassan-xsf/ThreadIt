@@ -119,10 +119,10 @@ export async function GET(req: Request, { params }: { params: { communityId: str
                             }
                         }
                     },
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                }
+                },
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
         let isJoined = false;
