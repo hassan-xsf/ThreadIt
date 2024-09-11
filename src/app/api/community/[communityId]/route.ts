@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
 
-export async function GET(req: Request, { params }: { params: { communityId: string } }) {
+export async function GET({ params }: { params: { communityId: string } }) {
     try {
         const { communityId } = params;
         const session = await getAuthSession();  

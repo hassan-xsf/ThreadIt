@@ -1,12 +1,12 @@
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
-export async function POST(res: Response) {
+export async function POST(req: NextRequest) {
     try {
 
-        const body = await res.json();
+        const body = await req.json();
         const {communityId} : {communityId : string} = body;
         const session = await getAuthSession()
 
