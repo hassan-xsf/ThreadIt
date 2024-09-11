@@ -41,7 +41,7 @@ export type PostProps = {
 
 export function Post({ comId, id, author, title, content, image, votes, commentCount, timeAgo, comments, commentsDisabled = false, comName, comProfile }: PostProps) {
     return (
-        <div className="w-[50vw] 2xl:w[40vw] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
+        <div className="w-[50vw] 2xl:w-[40vw] min-w-96 mx-auto justify-center flex flex-row my-8 gap-4">
             <Card className={cn("bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100 h-fit", commentsDisabled ? "cursor-pointer hover:dark:bg-zinc-800 hover:bg-gray-100 min-w-full" : "cursor-default w-[80%]")} >
                 <Link href={`/c/${comId}/post/${id}`}>
                     {
@@ -61,7 +61,7 @@ export function Post({ comId, id, author, title, content, image, votes, commentC
                         </div>
                     </CardHeader>
                     <CardContent>
-                        {image && <Image height = "900" width = "900" src={image} alt={title} className="w-full rounded-md mb-4" />}
+                        {image && <Image height = "900" width = "900" src={image} alt={title} className="w-full rounded-md mb-4 max-h-full" />}
                         <p className="text-sm break-all">{content}</p>
                     </CardContent>
                 </Link>

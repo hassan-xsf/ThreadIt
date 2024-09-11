@@ -41,7 +41,7 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
     const { mutate: commentMutate, isPending } = useMutation({
         mutationFn: commentService,
         onSuccess: () => {
-            toast.success("Commented successfully!")
+            toast.info("Sending comment on post...")
             router.refresh();
 
         },
@@ -101,7 +101,7 @@ const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comm
     const { mutate: replyMutate, isPending } = useMutation({
         mutationFn: commentService,
         onSuccess: (res) => {
-            toast.success("Replied successfully!")
+            toast.info("Sending reply on comment...")
             router.refresh();
 
         },
