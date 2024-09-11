@@ -5,11 +5,12 @@ import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest, { params }: { params: { communityId: string } }) {
+    const communityId = params.communityId
+
     try {
-        const {searchParams} = new URL(req.url)
-        const communityId = searchParams.get('communityId');
-    
+        console.log(communityId)
+        
         if (!communityId) {
             return NextResponse.json({
                 success: false,
