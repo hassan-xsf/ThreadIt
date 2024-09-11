@@ -78,7 +78,7 @@ const CreateCommunity = () => {
         onSuccess: (res) => {
             toast.success("Your community has been created!")
             router.push(`/c/${res.data.data.id}`)
-        },  
+        },
         onError: (error) => {
             console.log(error)
             if (error instanceof AxiosError) {
@@ -87,7 +87,7 @@ const CreateCommunity = () => {
             toast.error("There was a problem, Error code: 500")
         }
     })
-    
+
     const closeModal = () => {
         if (isOpen && !createCom.isPending) {
             setIsOpen(false)
@@ -179,7 +179,7 @@ const CreateCommunity = () => {
                                 Cancel
                             </button>
                             <button
-                                disabled = {createCom.isPending}
+                                disabled={createCom.isPending}
                                 type="submit"
                                 className="px-4 py-1 sm:py-2 border border-transparent rounded-xl shadow-sm text-xs sm:text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600"
                             >
@@ -193,14 +193,14 @@ const CreateCommunity = () => {
                     <div className="bg-white dark:bg-primary-black rounded-lg shadow overflow-hidden">
                         <div className="h-14 sm:h-24 bg-blue-500 relative">
                             {bannerImage && (
-                                <Image src={bannerImage} fill = {true} alt="Community banner" className="w-full h-full object-fill" />
+                                <Image src={bannerImage} fill={true} alt="Community banner" className="w-full h-full object-fill" />
                             )}
                         </div>
                         <div className="p-4">
                             <div className="flex items-center space-x-3">
-                                <div className="size-10 sm:size-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
+                                <div className="relative h-10 w-10 sm:h-16 sm:w-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
                                     {profileImage ? (
-                                        <Image fill = {true} src={profileImage} alt="Community profile" className="w-full h-full object-fill" />
+                                        <Image fill={true} src={profileImage} alt="Community profile" className="object-fill" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
                                             <Users size={32} className="text-gray-400 dark:text-gray-500" />
