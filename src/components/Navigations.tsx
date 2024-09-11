@@ -11,7 +11,7 @@ const Navigations = () => {
     const router = useRouter();
     const handleNavigation = (feed: string) => {
         router.push(`/?feed=${feed}`);
-        setTimeout(() => window.location.reload() , 200);
+        setTimeout(() => window.location.reload() , 500);
     };
     return (
         <ul className="space-y-1">
