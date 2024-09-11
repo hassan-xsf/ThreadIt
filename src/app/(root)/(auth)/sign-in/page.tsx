@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import GithubSignIn from '@/components/ui/GithubSignIn'
+import GithubSignIn from '@/components/GithubSignIn'
 import { X } from 'lucide-react'
 
 

@@ -2,13 +2,13 @@ import React from 'react'
 import { MessageSquare, MoreHorizontal, Share2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import RightSideRules from "@/components/ui/RightSideRules"
-import ShareButton from "@/components/ui/ShareButton"
-import UserAvatar from "@/components/ui/UserAvatar"
+import RightSideRules from "@/components/RightSideRules"
+import ShareButton from "@/components/ShareButton"
+import UserAvatar from "@/components/UserAvatar"
 
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import Votes from "@/components/ui/Votes"
+import Votes from "@/components/Votes"
 import { Vote } from '@prisma/client'
 import CommentBox from './CommentBox'
 

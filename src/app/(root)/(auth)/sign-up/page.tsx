@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import GithubSignIn from '@/components/ui/GithubSignIn'
+import GithubSignIn from '@/components/GithubSignIn'
 import { X } from 'lucide-react'
 import { signup } from '@/services/sign-up'
 import { useMutation } from '@tanstack/react-query'

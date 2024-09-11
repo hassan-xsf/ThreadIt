@@ -1,10 +1,10 @@
 
 import { getAuthSession } from "@/lib/auth"
-import UserAvatar from "@/components/ui/UserAvatar"
-import CreatePost from "@/components/ui/CreatePost"
+import UserAvatar from "@/components/UserAvatar"
+import CreatePost from "@/components/CreatePost"
 import { db } from "@/lib/db"
-import NotFound from "@/components/ui/NotFound"
-import LeftSidebar from "@/components/ui/LeftSidebar"
+import NotFound from "@/components/NotFound"
+import LeftSidebar from "@/components/LeftSidebar"
 
 export default async function page({ params }: { params: { cid: string } }) {
     const session = await getAuthSession();

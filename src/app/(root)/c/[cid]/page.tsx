@@ -10,10 +10,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
-import NotFound from '@/components/ui/NotFound'
+import NotFound from '@/components/NotFound'
 import timeAgo from '@/lib/timeAgo'
-import Post from "@/components/ui/Post"
-import LeftSidebar from '@/components/ui/LeftSidebar'
+import Post from "@/components/Post"
+import LeftSidebar from '@/components/LeftSidebar'
 import { PostResponse } from '@/types/PostResponse'
 
 

@@ -1,9 +1,9 @@
 
-import NotFound from "@/components/ui/NotFound"
+import NotFound from "@/components/NotFound"
 
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
-import Post from "@/components/ui/Post"
+import Post from "@/components/Post"
 
 
 
