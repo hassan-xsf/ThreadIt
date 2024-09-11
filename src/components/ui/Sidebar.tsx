@@ -1,5 +1,5 @@
 import { getAuthSession } from '@/lib/auth'
-import { Home, TrendingUp, Compass, List, Plus, Info, HelpCircle } from 'lucide-react'
+import {Plus, Info, HelpCircle } from 'lucide-react'
 
 import Link from 'next/link'
 import MyCommunity from './MyCommunity'
@@ -10,26 +10,26 @@ const Sidebar = async () => {
     const data = await getAuthSession();
 
     return (
-        <aside className="hidden sm:block w-64 bg-white min-h-screen dark:bg-black border-r border-gray-200 dark:border-gray-700 pt-16 overflow-y-auto fixed top-0">
+        <aside className="w-14 sm:w-64 bg-white flex flex-col items-center sm:items-start min-h-screen border-r border-gray-200 dark:border-gray-800 fixed top-14 z-50">
             <div className="p-4">
                 <Navigations/>
             </div>
             {
                 data?.user &&
                 <div className="border-t border-gray-200 dark:border-gray-800 p-4">
-                    <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
+                    <h3 className="text-[5px] sm:text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
                     <ul className="space-y-3">
                         <MyCommunity session={data} />
-                        <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
+                        <Link href="/c/create" className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
                             <Plus size={24} />
-                            <Link href="/c/create">Create a community</Link>
-                        </li>
+                            <span className = "hidden sm:block">Create a community</span>
+                        </Link>
                     </ul>
                 </div>
             }
 
             <div className="border-t border-gray-200 dark:border-gray-800 p-4">
-                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">RESOURCES</h3>
+                <h3 className="text-[5px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">RESOURCES</h3>
                 <ul className="space-y-1">
                     {[
                         { icon: Info, label: 'About' },
@@ -39,7 +39,7 @@ const Sidebar = async () => {
                             <div className="p-1 rounded-full">
                                 <item.icon size={28} className="dark:text-white text-black" />
                             </div>
-                            <span>{item.label}</span>
+                            <span className = "hidden sm:block">{item.label}</span>
                         </li>
                     ))}
                 </ul>

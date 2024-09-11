@@ -3,10 +3,7 @@ import NotFound from "@/components/ui/NotFound"
 
 import { db } from "@/lib/db"
 import timeAgo from "@/lib/timeAgo"
-import { Comment, Vote } from "@prisma/client"
 import Post from "@/components/ui/Post"
-
-
 
 
 

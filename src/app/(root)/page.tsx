@@ -53,12 +53,12 @@ export default function page() {
 
   return (
     <>
-      <div className="min-h-screen sm:pl-44 mx-auto bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
+      <div className="min-h-screen pl-10 sm:pl-44 mx-auto bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
         {
           isLoading && !data ?
             <PostSkeleton />
             :
-            <div className="w-[80vw] sm:w-[calc(100vw-50vw)] mx-auto">
+            <div className="w-[70vw] sm:w-[calc(100vw-50vw)] sm:mx-auto">
               {
                 posts.length ?
                   (

@@ -25,7 +25,7 @@ const Navigations = () => {
                     <div className="p-1 rounded-full">
                         <item.icon size={20} className="dark:text-white text-black" />
                     </div>
-                    <span>{item.label}</span>
+                    <span className = "hidden sm:block">{item.label}</span>
                 </button>
             ))}
         </ul>

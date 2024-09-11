@@ -101,7 +101,7 @@ export default function page() {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-primary-black shadow-xl w-[95%] sm:w-full rounded-xl max-w-4xl overflow-hidden flex">
+            <div className="bg-white dark:bg-primary-black shadow-xl w-[95%] sm:w-full rounded-xl max-w-4xl overflow-hidden flex flex-col sm:flex-row">
                 <div className="flex-1 p-6">
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">Create Your Community</h2>
@@ -188,7 +188,7 @@ export default function page() {
                     </form>
                 </div>
                 <div className="w-80 bg-gray-100 dark:bg-primary-black p-6 border-l border-gray-200 dark:border-gray-600">
-                    <h3 className="text-sm sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">Preview</h3>
+                    <h3 className="text-sm sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center sm:text-start">Preview</h3>
                     <div className="bg-white dark:bg-primary-black rounded-lg shadow overflow-hidden">
                         <div className="h-14 sm:h-24 bg-blue-500 relative">
                             {bannerImage && (
@@ -197,7 +197,7 @@ export default function page() {
                         </div>
                         <div className="p-4">
                             <div className="flex items-center space-x-3">
-                                <div className="w-16 h-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
+                                <div className="size-10 sm:size-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
                                     {profileImage ? (
                                         <img src={profileImage} alt="Community profile" className="w-full h-full object-fill" />
                                     ) : (

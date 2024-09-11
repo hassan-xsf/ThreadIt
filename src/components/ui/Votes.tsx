@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { CardFooter, } from "@/components/ui/card"
 import { ArrowBigUp, ArrowBigDown, Loader2 } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import { vote } from '@/services/vote'
