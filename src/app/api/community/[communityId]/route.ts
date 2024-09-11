@@ -1,13 +1,23 @@
 
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
 
-export async function GET({ params }: { params: { communityId: string } }) {
+export async function GET(req: NextRequest) {
     try {
-        const { communityId } = params;
+        const {searchParams} = new URL(req.url)
+        const communityId = searchParams.get('communityId');
+    
+        if (!communityId) {
+            return NextResponse.json({
+                success: false,
+                message: "Invalid community ID!",
+            },
+                { status: 400 }
+            );
+        }
         const session = await getAuthSession();  
         const communityExists = await db.community.findFirst({
             where: {
