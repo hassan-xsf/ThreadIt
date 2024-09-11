@@ -118,7 +118,7 @@ const page = ({ params }: { params: { cid: string } }) => {
                     <div className="flex">
                         {/* Main content area */}
                         <div className="order-10 pt-20 w-1/4">
-                            <LeftSidebar name={data.data.data.name} description={data.data.data.c.description} members={commMembers} session={session} />
+                            <LeftSidebar name={data.data.data.c.name} description={data.data.data.c.description} members={commMembers} session={session} />
                         </div>
 
                         <div className="bg-white dark:bg-primary-black p-4 rounded-md shadow-sm">
