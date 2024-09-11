@@ -22,7 +22,7 @@ import GithubSignIn from '@/components/GithubSignIn'
 import { X } from 'lucide-react'
 
 
-const page = () => {
+const SignInPage = () => {
     const [isOpen, setIsOpen] = useState(true)
 
     const router = useRouter();
@@ -122,4 +122,4 @@ const page = () => {
         </div>
     )
 }
-export default page
+export default SignInPage

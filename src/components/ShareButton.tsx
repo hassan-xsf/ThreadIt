@@ -26,7 +26,7 @@ const ShareButton = ({link , children} : {link: string ,children : React.ReactEl
 
     useEffect(() => {
         setcopyLink(window.location.host + link)
-    } , [])
+    } , [link])
 
     const handleCopy = () => {
         navigator.clipboard.writeText(copyLink)
@@ -44,7 +44,7 @@ const ShareButton = ({link , children} : {link: string ,children : React.ReactEl
                 <DialogHeader>
                     <DialogTitle className = "text-blue-500">Share link</DialogTitle>
                     <DialogDescription>
-                        Click on the 'copy' icon to copy the link
+                        Click on the &apos;copy&apos; icon to copy the link
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center space-x-2">

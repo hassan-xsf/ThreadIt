@@ -15,7 +15,7 @@ import { PostSkeleton } from "@/components/PostSkeleton";
 
 import { type PostResponse } from "@/types/PostResponse";
 
-export default function page() {
+export default function Home() {
 
   const { ref, inView } = useInView();
   const [posts, setPost] = useState<PostResponse[]>([]);

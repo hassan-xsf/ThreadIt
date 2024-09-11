@@ -14,7 +14,7 @@ export default function NoPostsAvailable() {
                     No Posts Available
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    We couldn't find any posts at the moment. Join some communities or create your own posts!
+                    We couldn&apos;t find any posts at the moment. Join some communities or create your own posts!
                 </p>
                 <div className="space-y-4">
                     <Link

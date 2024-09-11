@@ -74,7 +74,7 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
             </form>
 
             {initialComments && initialComments.map(comment => (
-                <CommentComponent key={comment.id} postId={postId} comment={comment} />
+                (comment.parentComment === null) && <CommentComponent key={comment.id} postId={postId} comment={comment} />
             ))}
         </div>
     )
@@ -84,9 +84,9 @@ const CommentBox = ({ postId, initialComments }: { postId: string, initialCommen
 
 const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comment: CommentProps; depth?: number }) => {
 
-    if (depth >= 3) return null;
-    if(comment.parentComment !== null && depth == 0) return;
     const router = useRouter();
+    
+    // if(comment.parentComment !== null && depth == 0) return;
 
     const { handleSubmit: handleReply, register: replyRegister, formState: { errors: replyError }, reset: resetReply } = useForm({
         resolver: zodResolver(submitCommentSchema),
@@ -155,7 +155,8 @@ const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comm
             </div>
 
             {comment.children && comment.children.map(reply => (
-                <CommentComponent postId={postId} key={reply.id} comment={reply as CommentProps} depth={depth + 1} />
+                
+                depth < 3 && <CommentComponent postId={postId} key={reply.id} comment={reply as CommentProps} depth={depth + 1} />
             ))}
         </div>
     );

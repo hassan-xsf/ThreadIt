@@ -24,7 +24,7 @@ const NotFound = ({name} : {name: string}) => {
                 <AlertDialogHeader>
                     <AlertDialogTitle className = "text-red-500">Error 404: {name} Not Found</AlertDialogTitle>
                     <AlertDialogDescription>
-                        The {name.toLowerCase()} you're looking for doesn't exist!
+                        The {name.toLowerCase()} you&apos;re looking for doesn&apos;t exist!
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
