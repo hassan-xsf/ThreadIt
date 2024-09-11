@@ -4,12 +4,14 @@ import "../globals.css";
 import Providers from "@/providers/Providers";
 import Navbar from "@/components/ui/Navbar";
 import { Toaster } from "sonner";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ThreadIt - A Reddit Clone",
   description: "ThreadIt is a Reddit clone built with NextJS + NextAuth + Prisma + React Query",
+  icons: "/threadit.svg",
 };
 
 export default function RootLayout({

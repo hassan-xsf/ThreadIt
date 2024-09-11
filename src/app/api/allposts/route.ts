@@ -77,7 +77,7 @@ export async function GET(req : NextRequest) {
         })
         const totalPosts = await db.post.count({where});
         const hasNextPage = skip + take < totalPosts;
-
+        console.log(totalPosts)
         return NextResponse.json({
             success: true,
             message: "Posts has been retrieved successfully.",

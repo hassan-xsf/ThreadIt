@@ -29,18 +29,16 @@ const Sidebar = async () => {
             </div>
             {
                 data?.user &&
-                <>
-                    <div className="border-t border-gray-200 dark:border-gray-800 p-4">
-                        <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
-                        <ul className="space-y-3">
-                            <MyCommunity session = {data}/>
-                            <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
-                                <Plus size={24} />
-                                <Link href="/c/create">Create a community</Link>
-                            </li>
-                        </ul>
-                    </div>
-                </>
+                <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+                    <h3 className="text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
+                    <ul className="space-y-3">
+                        <MyCommunity session={data} />
+                        <li className="flex pt-2 items-center space-x-2 text-black dark:text-white cursor-pointer">
+                            <Plus size={24} />
+                            <Link href="/c/create">Create a community</Link>
+                        </li>
+                    </ul>
+                </div>
             }
 
             <div className="border-t border-gray-200 dark:border-gray-800 p-4">
