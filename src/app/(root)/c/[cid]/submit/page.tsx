@@ -6,7 +6,7 @@ import { db } from "@/lib/db"
 import NotFound from "@/components/NotFound"
 import LeftSidebar from "@/components/LeftSidebar"
 
-export default async function page({ params }: { params: { cid: string } }) {
+export default async function SubmitPost({ params }: { params: { cid: string } }) {
     const session = await getAuthSession();
     const { cid } = params;
 

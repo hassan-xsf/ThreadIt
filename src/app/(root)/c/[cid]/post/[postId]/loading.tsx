@@ -2,7 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 
-export default function loading() {
+export default function Loading() {
     return (
         <Card className="max-w-2xl mx-auto my-8 bg-white dark:bg-primary animate-pulse">
             <CardHeader className="space-y-2">

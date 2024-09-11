@@ -24,7 +24,7 @@ import { signup } from '@/services/sign-up'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 
-const page = () => {
+const SignupPage = () => {
 
     const [isOpen, setIsOpen] = useState(true)
     const router = useRouter();
@@ -123,7 +123,7 @@ const page = () => {
                     </Form>
                     <div className="mt-4 text-center">
                         <span className="text-sm text-gray-500 dark:text-gray-400"> </span>
-                        <Link href="/sign-in" className="text-sm text-blue-600 hover:underline dark:text-blue-400">Don't have an account?</Link>
+                        <Link href="/sign-in" className="text-sm text-blue-600 hover:underline dark:text-blue-400">Don&apos;t have an account?</Link>
                     </div>
                 </div>
             </div>
@@ -131,4 +131,4 @@ const page = () => {
     )
 }
 
-export default page
+export default SignupPage

@@ -7,7 +7,7 @@ import Post from "@/components/Post"
 
 
 
-export default async function page({ params }: { params: { postId: string, cid: string } }) {
+export default async function PostPage({ params }: { params: { postId: string, cid: string } }) {
 
     const { postId, cid } = params;
 

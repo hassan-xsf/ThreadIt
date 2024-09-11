@@ -13,7 +13,7 @@ const Navbar = async () => {
     const data = await getAuthSession();
     return (
         <>
-            <nav className="fixed top-0 py-2 pr-6 px-1 sm:px-2 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <nav className="fixed top-0 py-2 pr-6 px-1 sm:px-2 left-0 right-0 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700 flex items-center justify-between z-50">
                 <div className="flex justify-between items-center w-[60%]">
 
                     <Link href="/" className="flex justify-center gap-2 text-blue-500 h-[3vh] 2xl:h-[3.5vh] pr-4 sm:pr-0">

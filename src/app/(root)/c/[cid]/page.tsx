@@ -17,7 +17,7 @@ import LeftSidebar from '@/components/LeftSidebar'
 import { PostResponse } from '@/types/PostResponse'
 
 
-const page = ({ params }: { params: { cid: string } }) => {
+const CommunityPage = ({ params }: { params: { cid: string } }) => {
 
     const { data: session } = useSession()
     const { cid } = params;
@@ -155,4 +155,4 @@ const page = ({ params }: { params: { cid: string } }) => {
     </>
 }
 
-export default page
+export default CommunityPage

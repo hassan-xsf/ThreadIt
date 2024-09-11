@@ -11,10 +11,11 @@ import { createCommunity } from '@/services/community'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
 import { communitySchema } from '@/schemas/communitySchema'
+import Image from 'next/image'
 
 type FormData = z.infer<typeof communitySchema>
 
-export default function page() {
+const CreateCommunity = () => {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(true)
     const [bannerImage, setBannerImage] = useState<string | null>(null)
@@ -192,14 +193,14 @@ export default function page() {
                     <div className="bg-white dark:bg-primary-black rounded-lg shadow overflow-hidden">
                         <div className="h-14 sm:h-24 bg-blue-500 relative">
                             {bannerImage && (
-                                <img src={bannerImage} alt="Community banner" className="w-full h-full object-fill" />
+                                <Image src={bannerImage} fill = {true} alt="Community banner" className="w-full h-full object-fill" />
                             )}
                         </div>
                         <div className="p-4">
                             <div className="flex items-center space-x-3">
                                 <div className="size-10 sm:size-16 rounded-full bg-gray-300 dark:bg-primary-black overflow-hidden border-4 border-white dark:border-gray-800">
                                     {profileImage ? (
-                                        <img src={profileImage} alt="Community profile" className="w-full h-full object-fill" />
+                                        <Image fill = {true} src={profileImage} alt="Community profile" className="w-full h-full object-fill" />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center">
                                             <Users size={32} className="text-gray-400 dark:text-gray-500" />
@@ -220,6 +221,7 @@ export default function page() {
         </div>
     )
 }
+
 
 interface ImageUploadBoxProps {
     type: 'banner' | 'profile'
@@ -279,3 +281,4 @@ function ImageUploadBox({ type, onUpload, onDrop }: ImageUploadBoxProps) {
         </div>
     );
 }
+export default CreateCommunity
