@@ -9,7 +9,7 @@ import { QueryClient } from '@tanstack/react-query'
 const queryClient = new QueryClient();
 const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
-        <ThemeProvider attribute="class" enableSystem = {false} defaultTheme="dark">
+        <ThemeProvider attribute="class" enableSystem = {false} defaultTheme="light">
             <QueryClientProvider client={queryClient}>
                 <SessionProvider>
                     {children}
