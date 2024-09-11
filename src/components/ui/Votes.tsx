@@ -39,7 +39,6 @@ const Votes = ({ id, votes, voteFor, children }: { id: string, votes: Vote[], vo
                 else if (e.type === "Downvote") {
                     setisVoted(TypeEnum.Downvote)
                 }
-
             })
         }
 

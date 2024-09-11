@@ -1,14 +1,17 @@
 
 "use client"
-import NoPostsAvailable from "@/components/ui/NoPostAvailable";
-import Post from "@/components/ui/Post";
-import { PostSkeleton } from "@/components/ui/PostSkeleton";
 import timeAgo from "@/lib/timeAgo";
 import { allPosts } from "@/services/allposts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+
+
+import NoPostsAvailable from "@/components/ui/NoPostAvailable";
+import Post from "@/components/ui/Post";
+import { PostSkeleton } from "@/components/ui/PostSkeleton";
+
 
 import { type PostResponse } from "@/types/PostResponse";
 
@@ -17,7 +20,9 @@ export default function page() {
   const { ref, inView } = useInView();
   const [posts, setPost] = useState<PostResponse[]>([]);
   const [skip, setSkip] = useState(0);
-  const [take, setTake] = useState(2);
+
+  const take = 2; /// 2 posts per page.
+
   const [nextPage, setNextPage] = useState(true)
 
 
@@ -25,9 +30,10 @@ export default function page() {
   const feed = searchParams.get('feed') || 'home';
 
   const { data, isLoading } = useQuery({
-    queryKey: ['allPosts', { feed, skip, take }],
+    queryKey: ['allPosts', feed, skip, take],
     queryFn: () => allPosts({ feed, skip, take }),
     placeholderData: keepPreviousData,
+    staleTime: 0,
     enabled: nextPage
   })
 
@@ -42,7 +48,6 @@ export default function page() {
   useEffect(() => {
     if (inView) {
       setSkip(prev => prev + take);
-      setTake(2);
     }
   }, [inView])
 
@@ -56,24 +61,25 @@ export default function page() {
             <div className="w-[80vw] sm:w-[calc(100vw-50vw)] mx-auto">
               {
                 posts.length ?
-                  (posts.map((post: PostResponse, indx: number) => (
-                    <Post
-                      key={post.id + indx}
-                      comName={post.community.name}
-                      comProfile={post.community.profile || ""}
-                      comId={post.community.id}
-                      id={post.id}
-                      title={post.heading}
-                      author={post.User}
-                      content={post.content}
-                      image={post.postImage || undefined}
-                      votes={post.votes}
-                      commentCount={post._count?.comments || 0}
-                      commentsDisabled={true}
-                      comments={[]}
-                      timeAgo={timeAgo(post.createdAt)}
-                    />
-                  )))
+                  (
+                    posts.map((post: PostResponse, indx: number) => (
+                      <Post
+                        key={post.id + indx}
+                        comName={post.community.name}
+                        comProfile={post.community.profile || ""}
+                        comId={post.community.id}
+                        id={post.id}
+                        title={post.heading}
+                        author={post.User}
+                        content={post.content}
+                        image={post.postImage || undefined}
+                        votes={post.votes}
+                        commentCount={post._count?.comments || 0}
+                        commentsDisabled={true}
+                        comments={[]}
+                        timeAgo={timeAgo(post.createdAt)}
+                      />
+                    )))
 
                   :
                   <NoPostsAvailable />

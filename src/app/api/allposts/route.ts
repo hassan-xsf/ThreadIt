@@ -48,7 +48,6 @@ export async function GET(req : NextRequest) {
             });
             if (coms?.joinedCommunities?.length) {
                 const communityIds = coms.joinedCommunities.map(c => c.id);
-                console.log(communityIds);
                 where = {
                     communityId: {
                         in: communityIds,
@@ -81,11 +80,11 @@ export async function GET(req : NextRequest) {
         })
         const totalPosts = await db.post.count({where});
         const hasNextPage = skip + take < totalPosts;
-        console.log(totalPosts)
+
         return NextResponse.json({
             success: true,
             message: "Posts has been retrieved successfully.",
-            data: posts,
+            data: posts ,
             nextPage: hasNextPage,
         },
             { status: 201 }

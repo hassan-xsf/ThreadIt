@@ -3,6 +3,7 @@ import { Home, TrendingUp, Compass, List, Plus, Info, HelpCircle } from 'lucide-
 
 import Link from 'next/link'
 import MyCommunity from './MyCommunity'
+import Navigations from './Navigations'
 
 const Sidebar = async () => {
 
@@ -11,21 +12,7 @@ const Sidebar = async () => {
     return (
         <aside className="hidden sm:block w-64 bg-white min-h-screen dark:bg-black border-r border-gray-200 dark:border-gray-700 pt-16 overflow-y-auto fixed top-0">
             <div className="p-4">
-                <ul className="space-y-1">
-                    {[
-                        { icon: Home, label: 'Home' },
-                        { icon: TrendingUp, label: 'Popular' },
-                        { icon: Compass, label: 'Explore' },
-                        { icon: List, label: 'All' },
-                    ].map((item, index) => (
-                        <Link href={`/?feed=${item.label.toLowerCase()}`} key={index} className="flex items-center gap-4 font-light text-sm py-1">
-                            <div className="p-1 rounded-full">
-                                <item.icon size={20} className="dark:text-white text-black" />
-                            </div>
-                            <span>{item.label}</span>
-                        </Link>
-                    ))}
-                </ul>
+                <Navigations/>
             </div>
             {
                 data?.user &&
