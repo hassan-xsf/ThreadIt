@@ -1,5 +1,5 @@
 <p align="center">
-  <img src = "[https://github.com/user-attachments/assets/d961a607-a420-4adc-aa3d-326fe150e611](https://github.com/user-attachments/assets/1f773931-7bf8-4330-af92-56884eede18e)" alt = "ThreadIt"/>
+  <img src = "https://github.com/user-attachments/assets/1f773931-7bf8-4330-af92-56884eede18e" alt = "ThreadIt"/>
 </p>
 
 
