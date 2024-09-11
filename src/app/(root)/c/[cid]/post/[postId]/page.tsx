@@ -8,121 +8,109 @@ import Post from "@/components/ui/Post"
 
 
 
-export type CommentProps = Comment & {
-    commentOwner: {
-        name: string,
-        image: string,
-    }
-    votes: Vote[]
-    parentComment?: Comment,
-    children?: Comment[]
-}
+
 
 export default async function page({ params }: { params: { postId: string, cid: string } }) {
 
     const { postId, cid } = params;
-    // TODO
-    // Shouldn't have used this, but am lazy rn.
-
-    let postDetails: Record<any, any> | null = null;
 
     // As far as I am aware Prisma doesn't support recursive queries like this, Or am I missing something?
-    // TODO
     /// This thing manually-x find's the replies until third level.
-    if (postId) {
-        postDetails = await db.post.findUnique({
-            where: {
-                id: postId,
+
+    if (!postId) return <NotFound name="Post" />
+
+    const postDetails = await db.post.findUnique({
+        where: {
+            id: postId,
+        },
+        select: {
+            id: true,
+            heading: true,
+            content: true,
+            postImage: true,
+            createdAt: true,
+            User: {
+                select: {
+                    name: true,
+                    image: true,
+                }
             },
-            select: {
-                id: true,
-                heading: true,
-                content: true,
-                postImage: true,
-                createdAt: true,
-                User: {
-                    select: {
-                        name: true,
-                        image: true,
-                    }
-                },
-                votes: true,
-                comments: {
-                    select: {
-                        id: true,
-                        content: true,
-                        createdAt: true,
-                        commentId: true,
-                        parentComment: true,
-                        commentOwner: {
-                            select: {
-                                name: true,
-                                image: true,
-                            }
-                        },
-                        votes: true,
+            votes: true,
+            comments: {
+                select: {
+                    id: true,
+                    content: true,
+                    createdAt: true,
+                    commentId: true,
+                    parentComment: true,
+                    commentOwner: {
+                        select: {
+                            name: true,
+                            image: true,
+                        }
+                    },
+                    votes: true,
 
-                        // First level of children
-                        children: {
-                            select: {
-                                id: true,
-                                content: true,
-                                createdAt: true,
-                                commentId: true,
-                                parentComment: true,
-                                commentOwner: {
-                                    select: {
-                                        name: true,
-                                        image: true,
-                                    }
-                                },
-                                votes: true,
+                    // First level of children
+                    children: {
+                        select: {
+                            id: true,
+                            content: true,
+                            createdAt: true,
+                            commentId: true,
+                            parentComment: true,
+                            commentOwner: {
+                                select: {
+                                    name: true,
+                                    image: true,
+                                }
+                            },
+                            votes: true,
 
-                                // Second level of children (children of children)
-                                children: {
-                                    select: {
-                                        id: true,
-                                        content: true,
-                                        createdAt: true,
-                                        commentId: true,
-                                        parentComment: true,
-                                        commentOwner: {
-                                            select: {
-                                                name: true,
-                                                image: true,
-                                            }
-                                        },
-                                        votes: true,
+                            // Second level of children (children of children)
+                            children: {
+                                select: {
+                                    id: true,
+                                    content: true,
+                                    createdAt: true,
+                                    commentId: true,
+                                    parentComment: true,
+                                    commentOwner: {
+                                        select: {
+                                            name: true,
+                                            image: true,
+                                        }
+                                    },
+                                    votes: true,
 
-                                        // Third level of children (children of children of children)
-                                        children: {
-                                            select: {
-                                                id: true,
-                                                content: true,
-                                                createdAt: true,
-                                                commentId: true,
-                                                parentComment: true,
-                                                commentOwner: {
-                                                    select: {
-                                                        name: true,
-                                                        image: true,
-                                                    }
-                                                },
-                                                votes: true,
-                                            }
+                                    // Third level of children (children of children of children)
+                                    children: {
+                                        select: {
+                                            id: true,
+                                            content: true,
+                                            createdAt: true,
+                                            commentId: true,
+                                            parentComment: true,
+                                            commentOwner: {
+                                                select: {
+                                                    name: true,
+                                                    image: true,
+                                                }
+                                            },
+                                            votes: true,
                                         }
                                     }
                                 }
                             }
                         }
-                    },
-                    orderBy: {
-                        createdAt: 'desc'
                     }
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
             }
-        });
-    }
+        }
+    })
     return (
         !postDetails ? <NotFound name="Post" />
             :

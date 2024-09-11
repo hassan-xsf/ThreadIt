@@ -6,7 +6,7 @@ import RightSideRules from './RightSideRules'
 
 const LeftSidebar = ({ name, description, members , session }: { name: string, description: string, members: number , session: Session | null}) => {
     return (
-        <div className = "flex flex-col mx-4 w-full relative">
+        <div className = "hidden flex-col mx-4 w-full relative sm:flex">
             <div className="sticky inset-0 top-20">
                 <div className="bg-white dark:bg-zinc-950 p-4 rounded-xl shadow-sm mb-4">
                     <h2 className="text-lg font-semibold mb-2">{name}</h2>

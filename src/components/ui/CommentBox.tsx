@@ -7,7 +7,6 @@ import { useMutation } from '@tanstack/react-query';
 import { comment as commentService } from '@/services/comment';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
-import { CommentProps } from '@/app/(root)/c/[cid]/post/[postId]/page';
 import UserAvatar from './UserAvatar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import timeAgo from '@/lib/timeAgo';
+import { CommentProps } from '@/types/CommentProps';
 
 
 const submitCommentSchema = z.object({
@@ -140,7 +140,7 @@ const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comm
 
                     <p className="text-sm text-gray-600 dark:text-gray-300">{comment.content}</p>
                     <div className="flex items-center space-x-2 mt-1">
-                        <Votes id={comment.id} votes={comment.votes} voteFor='Comment'>
+                        <Votes id={comment.id} votes={comment.votes || []} voteFor='Comment'>
                             {depth < 2 && <Button variant="ghost" size="sm" className="text-xs p-0 h-auto" onClick={() => setShowReplyInput(!showReplyInput)}>Reply</Button>}
                         </Votes>
                     </div>

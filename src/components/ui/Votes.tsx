@@ -49,7 +49,6 @@ const Votes = ({ id, votes, voteFor, children }: { id: string, votes: Vote[], vo
     const { mutate: mutateVote, isPending } = useMutation({
         mutationFn: vote,
         onSuccess: (res) => {
-
             if (res.data.data.vote === null) {
                 setCurrentVotes(res.data.data.voteCount)
                 setisVoted(null)

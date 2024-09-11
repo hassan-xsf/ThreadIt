@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
+type OrderByType = 
+  | { createdAt: 'desc' } 
+  | { votes: { _count: 'desc' } };
+
 
 export async function GET(req : NextRequest) {
 
@@ -16,7 +20,7 @@ export async function GET(req : NextRequest) {
         const session = await getAuthSession()
 
 
-        let orderBy: Record<any, any> = { createdAt: 'desc' };
+        let orderBy: OrderByType = { createdAt: 'desc' };
 
         if (feed === 'popular') {
             orderBy =
@@ -86,8 +90,6 @@ export async function GET(req : NextRequest) {
         },
             { status: 201 }
         );
-
-
     } catch (error) {
         console.log(error)
         return NextResponse.json({
@@ -96,8 +98,5 @@ export async function GET(req : NextRequest) {
         },
             { status: 500 }
         );
-
-
     }
-
 }

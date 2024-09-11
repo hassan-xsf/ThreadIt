@@ -11,8 +11,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import Votes from "@/components/ui/Votes"
 import { Vote } from '@prisma/client'
 import CommentBox from './CommentBox'
-import { CommentProps } from '@/app/(root)/c/[cid]/post/[postId]/page'
+
 import CommunityAvatar from './CommunityAvatar'
+import { CommentProps } from '@/types/CommentProps'
 
 
 
@@ -31,7 +32,7 @@ export type PostProps = {
     votes: Vote[];
     commentCount: number;
     timeAgo: string;
-    comments: CommentProps[];
+    comments: CommentProps[]
     commentsDisabled?: boolean;
     comName?: string,
     comProfile?: string

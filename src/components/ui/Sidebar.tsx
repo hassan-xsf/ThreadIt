@@ -9,7 +9,7 @@ const Sidebar = async () => {
     const data = await getAuthSession();
 
     return (
-        <aside className="w-64 bg-white min-h-screen dark:bg-black border-r border-gray-200 dark:border-gray-700 pt-16 overflow-y-auto fixed top-0">
+        <aside className="hidden sm:block w-64 bg-white min-h-screen dark:bg-black border-r border-gray-200 dark:border-gray-700 pt-16 overflow-y-auto fixed top-0">
             <div className="p-4">
                 <ul className="space-y-1">
                     {[

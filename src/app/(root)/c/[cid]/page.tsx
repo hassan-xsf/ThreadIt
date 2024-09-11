@@ -14,7 +14,7 @@ import NotFound from '@/components/ui/NotFound'
 import timeAgo from '@/lib/timeAgo'
 import Post from "@/components/ui/Post"
 import LeftSidebar from '@/components/ui/LeftSidebar'
-import NoPostsAvailable from '@/components/ui/NoPostAvailable'
+import { PostResponse } from '@/types/PostResponse'
 
 
 const page = ({ params }: { params: { cid: string } }) => {
@@ -123,9 +123,7 @@ const page = ({ params }: { params: { cid: string } }) => {
 
                         <div className="bg-white dark:bg-primary-black p-4 rounded-md shadow-sm">
                             {
-                                //yeah yeah should'n't have
-                                /// TODO
-                                data.data.data.posts && data.data.data.posts.map((post: any) => (
+                                data.data.data.posts && data.data.data.posts.map((post: PostResponse) => (
                                     <Post
                                         comId={cid}
                                         comName={data.data.data.c.name}
