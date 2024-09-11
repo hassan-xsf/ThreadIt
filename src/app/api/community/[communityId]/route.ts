@@ -9,8 +9,6 @@ export async function GET(request: NextRequest, { params }: { params: { communit
     const communityId = params.communityId
 
     try {
-        console.log(communityId)
-        
         if (!communityId) {
             return NextResponse.json({
                 success: false,

@@ -56,7 +56,13 @@ export default function Home() {
       <div className="min-h-screen pl-10 sm:pl-44 mx-auto bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
         {
           isLoading ?
-            <PostSkeleton />
+            <>
+              <PostSkeleton />
+              <PostSkeleton />
+              <PostSkeleton />
+              <PostSkeleton />
+
+            </>
             :
             <div className="w-[70vw] sm:w-[calc(100vw-50vw)] sm:mx-auto">
               {
