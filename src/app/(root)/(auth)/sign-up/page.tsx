@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,

@@ -3,7 +3,7 @@
 import React from 'react'
 import { Home, TrendingUp, Compass, List } from 'lucide-react'
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 
 const Navigations = () => {

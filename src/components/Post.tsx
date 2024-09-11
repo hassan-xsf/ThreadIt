@@ -6,7 +6,7 @@ import RightSideRules from "@/components/ui/RightSideRules"
 import ShareButton from "@/components/ui/ShareButton"
 import UserAvatar from "@/components/ui/UserAvatar"
 
-import { Button, buttonVariants } from "@/components/ui/Button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import Votes from "@/components/ui/Votes"
 import { Vote } from '@prisma/client'

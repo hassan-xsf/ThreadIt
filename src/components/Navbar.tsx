@@ -1,7 +1,7 @@
 import React from 'react'
-import { buttonVariants } from "@/components/ui/Button"
+import { buttonVariants } from "@/components/ui/button"
 import Link from 'next/link'
-import { AlignJustify, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import ThemeBtn from './ThemeBtn'
 import { cn } from '@/lib/utils'
 import Sidebar from './Sidebar'

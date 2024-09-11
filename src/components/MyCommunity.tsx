@@ -1,8 +1,6 @@
 import { db } from '@/lib/db'
 import { Community } from '@prisma/client'
 import { Session } from 'next-auth'
-import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 import CommunityAvatar from './CommunityAvatar'
 

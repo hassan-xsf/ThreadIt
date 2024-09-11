@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input"
-import { Button } from './Button';
+import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
 import { comment as commentService } from '@/services/comment';
 import { toast } from 'sonner';

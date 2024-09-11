@@ -8,7 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from './Button';
 import { Info, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import LogoutBtn from './LogoutBtn';

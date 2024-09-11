@@ -3,7 +3,7 @@ import React from 'react'
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'

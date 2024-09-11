@@ -1,7 +1,7 @@
 "use client"
 import { Github } from 'lucide-react'
 import { signIn } from 'next-auth/react'
-import { Button } from './Button'
+import { Button } from '@/components/ui/button'
 import React from 'react'
 
 function GithubSignIn() {

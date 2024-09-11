@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { Plus, MoreHorizontal, Router } from 'lucide-react'
+import { Plus, MoreHorizontal } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getCommunity, joinCommunity } from '@/services/community'
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/components/ui/button'
 import CommunityLoading from './loading'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'

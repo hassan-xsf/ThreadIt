@@ -9,7 +9,7 @@ import {
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog"
   
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 const NotFound = ({name} : {name: string}) => {
     const router = useRouter();

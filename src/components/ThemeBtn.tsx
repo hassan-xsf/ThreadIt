@@ -3,7 +3,7 @@
 import { Sun, Moon } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
-import { Button } from './Button'
+import { Button } from '@/components/ui/button'
 
 const ThemeBtn = () => {
     const [mounted, setMounted] = useState(false)
