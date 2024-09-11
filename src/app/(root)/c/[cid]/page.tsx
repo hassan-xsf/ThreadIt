@@ -70,6 +70,7 @@ const page = ({ params }: { params: { cid: string } }) => {
                         {
                             data.data.data.c.banner ?
                                 <Image
+                                    priority
                                     width={1200}
                                     height={128}
                                     src={data.data.data.c.banner}
@@ -89,9 +90,9 @@ const page = ({ params }: { params: { cid: string } }) => {
                         <div className="absolute -bottom-8 left-4 flex items-end">
                             {
                                 data.data.data.c.profile ?
-                                    <Image className="bg-red-500 rounded-full flex items-center justify-center text-white text-4xl border-4 border-white" src={data.data.data.c.profile} width="96" height="96" alt="Profile" />
+                                    <Image priority className="bg-red-500 rounded-full flex items-center justify-center text-white text-4xl border-4 border-white" src={data.data.data.c.profile} width="96" height="96" alt="Profile" />
                                     :
-                                    <div className="bg-red-500 rounded-full flex size-24 items-center justify-center text-white text-4xl border-4 border-white">
+                                    <div className="bg-red-500 flex size-24 items-center justify-center text-white text-4xl border-4 border-white">
                                         {data.data.data.c.name[0]}
                                     </div>
                             }

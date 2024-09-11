@@ -128,7 +128,7 @@ const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comm
             <div className="flex items-start space-x-2">
                 {
                     comment.commentOwner &&
-                    <UserAvatar name={comment.commentOwner.name || "Unknown"} image={comment.commentOwner.image} size={5} />
+                    <UserAvatar name={comment.commentOwner.name || "Unknown"} image={comment.commentOwner.image} size={7} />
 
                 }
                 <div className="flex flex-col gap-1">
