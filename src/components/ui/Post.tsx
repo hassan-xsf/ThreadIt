@@ -53,7 +53,7 @@ export function Post({ comId, id, author, title, content, image, votes, commentC
                         <div className="flex-grow">
                             <div className="flex items-center space-x-2">
                                 <UserAvatar name={author.name} image={author.image} />
-                                <span className="text-sm font-semibold">{author.name}</span>
+                                <span className="text-sm font-semibold">u/{author.name}</span>
                                 <span className="text-xs text-gray-500 dark:text-gray-400">• {timeAgo}</span>
                             </div>
                             <h2 className="text-xl font-bold mt-2">{title}</h2>

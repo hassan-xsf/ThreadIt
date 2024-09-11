@@ -36,7 +36,7 @@ export default async function page({ params }: { params: { cid: string } }) {
                     <h1 className="text-2xl font-bold dark:text-white">Create post as</h1>
                     <div className="flex items-center space-x-2">
                         <UserAvatar image={session.user.image} name={session?.user.name} />
-                        <span className="text-lg font-medium dark:text-white">{session.user.name}</span>
+                        <span className="text-lg font-medium dark:text-white">u/{session.user.name}</span>
                     </div>
                     <CreatePost cid={cid} />
                 </div>

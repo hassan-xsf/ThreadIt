@@ -27,7 +27,7 @@ const LeftSidebar = ({ name, description, members , session }: { name: string, d
                         <div className="flex items-center space-x-2">
                             <UserAvatar image={session.user.image} name={session.user.name} />
                             <div>
-                                <p className="font-medium">{session.user.name}</p>
+                                <p className="font-medium">u/{session.user.name}</p>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">Hello there :)</p>
                             </div>
                         </div>

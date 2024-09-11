@@ -10,7 +10,7 @@ const Navigations = () => {
 
     const router = useRouter();
     const handleNavigation = (feed: string) => {
-        router.push(`?feed=${feed}`);
+        router.push(`/?feed=${feed}`);
         setTimeout(() => window.location.reload() , 200);
     };
     return (

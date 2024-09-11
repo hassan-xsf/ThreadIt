@@ -21,7 +21,7 @@ export default function page() {
   const [posts, setPost] = useState<PostResponse[]>([]);
   const [skip, setSkip] = useState(0);
 
-  const take = 2; /// 2 posts per page.
+  const take = 4; /// 4 posts per page.
 
   const [nextPage, setNextPage] = useState(true)
 
@@ -55,7 +55,7 @@ export default function page() {
     <>
       <div className="min-h-screen pl-10 sm:pl-44 mx-auto bg-white dark:bg-primary-black text-gray-900 dark:text-gray-100">
         {
-          isLoading && !data ?
+          isLoading ?
             <PostSkeleton />
             :
             <div className="w-[70vw] sm:w-[calc(100vw-50vw)] sm:mx-auto">

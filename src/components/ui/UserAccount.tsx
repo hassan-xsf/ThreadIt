@@ -30,7 +30,7 @@ const UserAccount: React.FC<UserAccountProps> = ({ image, name }) => {
           <div className="flex items-center gap-2">
             <UserAvatar image={image} name={name} />
             <div>
-              <p className="text-sm font-medium">{name}</p>
+              <p className="text-sm font-medium">u/{name}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">u/{name}</p>
             </div>
           </div>

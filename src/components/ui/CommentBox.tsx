@@ -134,7 +134,7 @@ const CommentComponent = ({ postId, comment, depth = 0 }: { postId: string, comm
                 <div className="flex flex-col gap-1">
                     <div className="flex-grow flex items-center">
 
-                        <p className="text-sm font-semibold">{comment.commentOwner?.name || "Unknown"}</p>
+                        <p className="text-sm font-semibold">u/{comment.commentOwner?.name || "Unknown"}</p>
                         <span className="text-xs text-gray-500 dark:text-gray-400">• {timeAgo(comment.createdAt)}</span>
                     </div>
 

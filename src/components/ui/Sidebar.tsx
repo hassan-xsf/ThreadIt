@@ -10,13 +10,13 @@ const Sidebar = async () => {
     const data = await getAuthSession();
 
     return (
-        <aside className="w-14 sm:w-64 bg-white flex flex-col items-center sm:items-start min-h-screen border-r border-gray-200 dark:border-gray-800 fixed top-14 z-50">
+        <aside className="w-14 sm:w-64 bg-white dark:bg-black flex flex-col items-center sm:items-start min-h-screen border-r border-gray-200 dark:border-gray-800 fixed top-[3.5rem] left-0 z-50">
             <div className="p-4">
                 <Navigations/>
             </div>
             {
                 data?.user &&
-                <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+                <div className="border-t w-full border-gray-200 dark:border-gray-800 p-4">
                     <h3 className="text-[5px] sm:text-xs pb-2 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">COMMUNITIES</h3>
                     <ul className="space-y-3">
                         <MyCommunity session={data} />
@@ -28,7 +28,7 @@ const Sidebar = async () => {
                 </div>
             }
 
-            <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+            <div className="border-t w-full border-gray-200 dark:border-gray-800 p-4">
                 <h3 className="text-[5px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">RESOURCES</h3>
                 <ul className="space-y-1">
                     {[

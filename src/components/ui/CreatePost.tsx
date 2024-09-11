@@ -57,7 +57,7 @@ const CreatePost = ({ cid }: { cid: string }) => {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                         <div>
-                            <Input id="title" placeholder="Title" className="placeholder:text-gray-500 py-2 mt-2 rounded-xl" {...field} maxLength={15} />
+                            <Input id="title" placeholder="Title" className="placeholder:text-gray-500 py-2 mt-2 rounded-xl" {...field} maxLength={64} />
                             {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
                         </div>
                     )}
@@ -73,7 +73,7 @@ const CreatePost = ({ cid }: { cid: string }) => {
                     control={control}
                     render={({ field, fieldState: { error } }) => (
                         <div>
-                            <Textarea id="body" placeholder="Body" className="placeholder:text-gray-500 py-2 mt-2 min-h-[100px]  rounded-xl" {...field} maxLength={201} />
+                            <Textarea id="body" placeholder="Body" className="placeholder:text-gray-500 py-2 mt-2 min-h-[100px]  rounded-xl" {...field} maxLength={1024} />
                             {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
                         </div>
                     )}
